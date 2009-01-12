@@ -74,7 +74,6 @@ class CreateItemHandler(webapp.RequestHandler):
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
 		viewhelpers.render_template(self, "elements/itemform", template_values)
-
 	def post(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		template_values = {
