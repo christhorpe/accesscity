@@ -1,6 +1,5 @@
 import wsgiref.handlers
 
-
 from google.appengine.ext import webapp
 
 import models
@@ -33,7 +32,7 @@ class ProfileHandler(webapp.RequestHandler):
 	def get(self, current_url, profileurl):
 		useraccount = models.get_current_auth_user(self)
 		profile = models.UserAccount.get_by_key_name(profileurl)
-		if not profile: 
+		if not profile:
 			profile = False
 		template_values = {
 			'useraccount': useraccount,
@@ -74,12 +73,34 @@ class CreateItemHandler(webapp.RequestHandler):
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
 		viewhelpers.render_template(self, "elements/itemform", template_values)
-
+	
 	def post(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
-		viewhelpers.render_template(self, "elements/postitem", template_values)
-
+		errors = 0
+		# validate parameters
+		required_fields = ["title","text","media_type","tag", "source"]
+		
+		for field in required_fields:
+		    if len(self.request.get(field)) == 0:
+		        template_values["error_message"] = "Missing Fields"
+		        errors = 1
+                viewhelpers.render_template(self, "views/home", template_values)
+		
+		
+		if errors == 0:
+		    # handle parameters
+		    item = models.Item()
+		    item.title = self.request.get('title')
+		    item.text = self.request.get('text')
+		    item.media_type = self.request.get('media_type')
+		    item.tag = self.request.get('tag')
+		    template_values["message"] = "Item Created"
+		    
+		    item.put()
+		    self.redirect('/')
+	
+	

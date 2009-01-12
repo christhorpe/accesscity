@@ -14,19 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-
-
-
 import wsgiref.handlers
 
 from google.appengine.ext import webapp
 
 import views
-
-
-
-
 
 
 def main():
@@ -38,6 +30,7 @@ def main():
 										('(/developer)', views.ContentHandler),
 										('(/createitem)', views.CreateItemHandler),
 										],debug=True)
+										
   wsgiref.handlers.CGIHandler().run(application)
 
 

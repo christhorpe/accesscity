@@ -15,7 +15,7 @@ class UserAccount(db.Model):
 	profiletext = db.TextProperty()
 	profileid = db.StringProperty()
 	name = db.StringProperty()
-	tempdetails = db.BooleanProperty(default=True)
+	tempdetails = db.BooleanProperty(default=True)  
 	thumbnail = db.StringProperty()
 	phone = db.StringProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
@@ -102,9 +102,6 @@ class Counter(db.Model):
 
 
 #methods 
-
-
-
 
 def get_counter(name):
 	total = 0

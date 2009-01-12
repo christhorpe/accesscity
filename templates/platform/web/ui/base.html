@@ -1,5 +1,16 @@
 {% include "../ui/header.html" %}
 
+{% if error_message %}
+	<div class="error">
+		<P>Error: {{ error_message }}</P>
+	</div>
+{% endif %}
+{% if message %}
+	<div class="message">
+		<P>{{ message }}</P>
+	</div>
+{% endif %}
+
 {% block mainpanel %}{% endblock %}
 
 {% include "../ui/footer.html" %}

@@ -1,5 +1,35 @@
-<form method="POST" action="/createitem">
-	<input type="hidden" name="action" value="postitem" />
-	<div><span class="formlabel">Title</span><input type="text" name="title" value="" /></div>
-	<div><input type="submit" name="submit" value="submit this information" /></div>
-</form>
+<h1>post now</h1>
+
+<div>
+		<form method="POST" action="/createitem">
+			<input type="hidden" name="action" value="postitem" />
+			<input type="hidden" name="source" value="web" />
+			<ul>
+				<li><span class="formlabel">Title</span><br/>
+						<input type="text" name="title" value="" />
+				</li>
+				<li>
+					Location:<br/>
+					Locations.all
+				</li>
+				<li><span class="formlabel">What thing is it?</span><br/>
+					<select name="media_type">
+						<option value="Text">Text</option>
+						<option value="Video">Video</option>
+						<option value="Photo">Photo</option>
+					</select>
+				<li><span class="formlabel">What format is it?</span><br/>
+						<select name="tag">
+							<option value="Text">Tip</option>
+							<option value="Video">Fault</option>
+							<option value="Photo">Update</option>
+						</select>
+					</li>
+				<li>
+					<span class="formlabel">Details</span><br/>
+					<textarea name="text" rows="5" cols="25"></textarea>
+				</li>
+				<li><input type="submit" name="submit" value="submit this information" /></li>
+			</ul>
+		</form>
+</div>
