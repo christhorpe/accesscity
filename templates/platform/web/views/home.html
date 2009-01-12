@@ -1,11 +1,32 @@
 {% extends "../ui/base.html" %}
-
 {% block mainpanel %}
-	
+		
 	{% if useraccount %}
 		{{useraccount.name}} / {{useraccount.user}} / {{useraccount.fbid}}
 	{% endif %}
+<div class="welcome">
+	<div class="firstcol">
+	<div class="description border-top">
+		<h1>hello</h1>
+		<P>Getting round London can be difficult for anyone, whatever your obstacle - mobility, buggies or heavy bags.</P>
+		<P>Search AccessCity for the easiest routes and help build the real view by adding your own experiences.</P>
+	</div>
 	
-	{% include "../elements/itemform.html" %}
+	<div class="post border-top">
+		{% include "../elements/itemform.html" %}
+	</div>
 	
+	<div class="latest border-top">
+		<h1>latest</h1>
+	</div>
+	</div>
+	
+	<div class="secondcol">
+		<div class="featured border-top">
+			<h1>featured</h1>
+		</div>
+		<div class="selection border-top">
+			<h2>Selection</h2>
+		</div>
+</div>
 {% endblock %}

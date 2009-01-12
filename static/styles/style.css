@@ -10,6 +10,9 @@ h1, h2, h3 {
 		margin:0px 0px 5px 0px;
 		padding:0;
 }
+p {
+  margin:0px;
+}
 
 ul {
   list-style-type:none;
@@ -55,6 +58,7 @@ div.header img {
 	border:0px;
 }
 
+
 div.search_box {
 	float:right;
 	margin-top: 20px;
@@ -69,12 +73,48 @@ h1 {
 	color: #ff9933;
 }
 
-div.latest {
-	font-size: 14px;
-	padding:4px;
+/* welcome page layout */
+div.firstcol {
+  min-height:340px;
+}
+div.welcome div {
+  padding:0px 10px 0px 0px;
 }
 
-div.latest div.item {
+div.description {
+  width:350px;
+  float:left;
+}
+div.description p {margin:0px 0px 15px 0px;}
+
+div.post {
+  width:290px;
+  float:left;
+}
+
+div.latest {
+  width:250px;
+  float:left;
+}
+
+div.secondcol {
+  min-height:400px;
+}
+div.secondcol div {
+  margin-top:10px;
+}
+
+div.featured {
+  float:left;
+  width:420px;
+}
+
+div.selection {
+  width:150px;
+  float:left;
+}
+
+div.old_latest div.item {
 	border-bottom: 1px dashed #99ccff;
 }
 

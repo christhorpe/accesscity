@@ -9,17 +9,20 @@
 	
 	<script type="text/javascript">
     	function init()	{
-			FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm", {"reloadIfSessionStateChanged":true});
-			FB.XFBML.Host.parseDomTree();
+				FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm", {"reloadIfSessionStateChanged":true});
+				FB.XFBML.Host.parseDomTree();
 		}
 	</script>
 	
 </head>
 
 <body onload="init()">
-
+	
+<div class="page">
+	
 {% include "../ui/header.html" %}
 
+<div class="content">
 {% if error_message %}
 	<div class="error">
 		<P>Error: {{ error_message }}</P>
@@ -32,5 +35,12 @@
 {% endif %}
 
 {% block mainpanel %}{% endblock %}
+</div>
 
 {% include "../ui/footer.html" %}
+
+</div>
+
+
+</body>
+</html>
