@@ -30,15 +30,23 @@ class LocationHandler(webapp.RequestHandler):
 
 class ProfileHandler(webapp.RequestHandler):
 	def get(self, current_url, profileurl):
+		# set all objects to be passed to template as False so we won't get object passed before instantiated errors
+		profile = False
+		items = False
+		ratings = False
+		locations = False
 		useraccount = models.get_current_auth_user(self)
 		profile = models.UserAccount.get_by_key_name(profileurl)
-		if not profile:
-			profile = False
+		if profile: 
+			items = models.get_user_items(profile)
+			ratings = models.get_user_ratings(profile)
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'profile': profile,
-			'profileurl': profileurl
+			'items': items,
+			'ratings': ratings,
+			'locations': locations,			
 		}
 		viewhelpers.render_template(self, "views/profile", template_values)
 
@@ -60,7 +68,7 @@ class ContentHandler(webapp.RequestHandler):
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'itemurl': itemurl
+			'current_url': current_url
 		}
 		viewhelpers.render_template(self, "content/"+ current_url, template_values)
 
@@ -73,7 +81,7 @@ class CreateItemHandler(webapp.RequestHandler):
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
 		viewhelpers.render_template(self, "elements/itemform", template_values)
-	
+
 	def post(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		template_values = {

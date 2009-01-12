@@ -15,7 +15,7 @@ class UserAccount(db.Model):
 	profiletext = db.TextProperty()
 	profileid = db.StringProperty()
 	name = db.StringProperty()
-	tempdetails = db.BooleanProperty(default=True)  
+	tempdetails = db.BooleanProperty(default=True)
 	thumbnail = db.StringProperty()
 	phone = db.StringProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
@@ -101,7 +101,8 @@ class Counter(db.Model):
 
 
 
-#methods 
+# START methods from Google relating to sharded counters
+
 
 def get_counter(name):
 	total = 0
@@ -122,6 +123,9 @@ def increment_counter(name):
 		counter.put()
 	db.run_in_transaction(txn)
 
+# END methods from Google relating to sharded counters
+
+# sequence methods for creating id's
 
 def get_new_gmailid():
 	increment_counter("gmail_sequence")
@@ -138,6 +142,9 @@ def get_new_itemid():
 	return str(get_counter("item_sequence")).zfill(16)
 
 
+
+# method to look up user account
+
 def get_user_account(user, fbid):
 	useraccount = False
 	query = db.Query(UserAccount)
@@ -148,6 +155,8 @@ def get_user_account(user, fbid):
 	useraccount = query.get()
 	return useraccount
 
+
+# methods to create useraccount objects 
 
 def create_user_account_from_gmail(user):
 	profileid = "gm" + get_new_gmailid()
@@ -174,6 +183,8 @@ def create_user_account_from_facebook(user):
 	return useraccount
 
 
+# get currently logged in user
+
 def get_current_auth_user(self):
 	nickname = ""	
 	useraccount = False
@@ -189,3 +200,16 @@ def get_current_auth_user(self):
 		if not useraccount:
 			useraccount = create_user_account_from_gmail(gmailuser)
 	return useraccount
+
+
+
+# methods relating to content for a user
+
+def get_user_items(useraccount):
+	items = Item.all().filter("useraccount =", useraccount).order("-created_at")
+	return items
+
+def get_user_ratings(useraccount):
+	ratings = Rating.all().filter("useraccount =", useraccount).order("-created_at")
+	return ratings
+
