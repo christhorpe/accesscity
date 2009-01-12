@@ -1,0 +1,25 @@
+{% extends "../ui/base.html" %}
+
+{% block mainpanel %}
+
+{% ifequal useraccount.network "facebook" %}
+	
+	Firing off Facebook activity feed pop up
+	
+	<script type="text/javascript">
+	var facebook_item_activity_feed = function() {
+  		var comment_data = {"location-url":'http://www.accesscity.co.uk/location/000002',
+							"location": 'Bethnal Green Tube',
+                      		"item-text":'Just testing',
+                      		"item-source":'Website',
+                      		"item-sourceurl":'http://www.accesscity.co.uk/applications/website'
+                      		};
+  		FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm");
+		FB.Connect.showFeedDialog(44623658895, comment_data);
+	};
+	facebook_item_activity_feed();
+	</script>
+	
+{% endifequal %}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>AccessCity :: trouble free travel</title>
+	<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+	<link href="/styles/style.css" media="screen" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+    	function init()	{
+			FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm", {"reloadIfSessionStateChanged":true});
+			FB.XFBML.Host.parseDomTree();
+		}
+	</script>
+	
+</head>
+
+
+
+<body onload="init()">
+
+<div class="page">
+	
+	<div class="user_bar">
+		<div id="user-bar-action">
+		{% if useraccount %}
+			{% if useraccount.user %}
+				Welcome {{useraccount.name}} | <a href="/profile/{{useraccount.profileid}}">My Profile</a> | <a href="{{user_action_url}}">Log out</a>
+			{% else %}
+				<fb:profile-pic uid="loggedinuser" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic> Welcome <fb:name uid="{{useraccount.fbid}}" useyou="false"></fb:name> | <a href="/profile/{{useraccount.profileid}}">My Profile</a> | <a href="#" onclick='FB.Connect.logoutAndRedirect("/")'>Logout</a>
+			{% endif %}
+		{% else %}
+			<a href="{{user_action_url}}">Sign in using your GMail account</a> / 
+				<fb:login-button size="small" background="white" length="short"></fb:login-button>
+				Sign in using Facebook Connect
+		{% endif %}
+		</div>
+	</div>
+	<!-- Header -->
+	<div class="header">
+		<!-- Logo -->
+	    <a href="/"><img alt="Accesscity_logo" src="/images/accesscity_logo.gif" /></a>
+				
+		<!-- User menu -->
+		<div class="search_box">
+		    <form action="/locations/index" method="post"><div style="margin:0;padding:0">
+			<input name="authenticity_token" type="hidden" value="683fa8645991225b6b9f0fe3366cc7d01d8a48b5" />
+		</div>
+			<input id="search_text" name="search_text" size="30" type="text" value="" />
+			<input name="commit" type="submit" value="Find" />
+		    <br/>
+			<small>e.g.<a href="/location/23">Bethnal Green</a></a> or <a href="/location/271">Brixton</a></small>
+		    </form>			    
+	</div>
+		
+
+
+
+<div class="header">
+
+
+
+</div>

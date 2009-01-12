@@ -1,0 +1,11 @@
+{% extends "../ui/base.html" %}
+
+{% block mainpanel %}
+
+	{% ifequal profile.network "facebook" %}
+		facebook
+	{% else %}
+		gmail
+	{% endifequal %}
+
+{% endblock %}
