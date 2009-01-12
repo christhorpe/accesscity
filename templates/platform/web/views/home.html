@@ -2,7 +2,9 @@
 
 {% block mainpanel %}
 	
-	{{useraccount.name}} / {{useraccount.user}} / {{useraccount.fbid}}
+	{% if useraccount %}
+		{{useraccount.name}} / {{useraccount.user}} / {{useraccount.fbid}}
+	{% endif %}
 	
 	{% include "../elements/itemform.html" %}
 	
