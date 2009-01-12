@@ -1,0 +1,36 @@
+{% extends "../ui/base.html" %}
+
+{% block title %} : developer {% endblock %}
+
+{% block mainpanel %}
+
+        <!-- Content -->
+    	<div class="content">
+
+            <h1>developers</h1>
+
+<P>We have an api to post issues around accesscity locations. So developers can build from the api</P>
+
+<h3>Ruby Example</h3>
+<p class="code">
+	smsurl = "http://www.accesscity.co.uk/items/create"
+	params = {
+	               "item[email]": email,
+	               "item[mobile]": mobile,
+	               "item[tag]": tag,
+	               "item[text]": message,
+	               "item[title]": "Posted by mobile",
+	               "item[location_shortname]": "beth",
+	               "item[media_type]": "Text"
+	               }
+	param_data = urllib.urlencode(params)
+	result = urlfetch.fetch(url=smsurl, payload=param_data, method=urlfetch.POST)
+</p>
+
+<h3>Curl</h3>
+<p class="code">
+	~ : curl -d "item[email]=079343872346&item[mobile]=user@somewhere.com&item[tag]=thing&item[text]=itsbroke&item[title]=Title&item[media_type]=Text&item[location_shortname]=beth" http://accesscity.co.uk/items/create
+</p>
+    	</div>
+	
+{% endblock %}
