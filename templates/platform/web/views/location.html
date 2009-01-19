@@ -1,7 +1,12 @@
 {% extends "../ui/base.html" %}
 
+{% block title %}
+	:: {{location.name}}
+{% endblock %}
+
 {% block mainpanel %}
 	
+	{% if location %}
 	<!-- Place header -->
 	<div class="location">
 	    <h1>{{location.name	}}</h1>
@@ -18,36 +23,35 @@
 					<P><i>Show people images/names</i></P>
 				</div>
 
-		<!-- Tips -->
-		<div class="border-top">
+				<!-- Tips -->
+				<div class="border-top">
 
-		    <h3>posts from people</h3>
-							<div class="tip">
-		        <h4><Span style="font-size:0.8em">Tip</Span>: <a href="/items/33">Busy</a>
-						<Span style="font-size:0.6em;color:#888">posted 11 days ago</Span></h4>
-		        <p>
-		            								I would avoid this evening as the station seems packed!
-															</p>
+		    	<h3>posts from people</h3>
+					<div class="tip">
+			        <h4><Span style="font-size:0.8em">Tip</Span>: <a href="/items/33">Busy</a>
+							<Span style="font-size:0.6em;color:#888">posted 11 days ago</Span></h4>
+			        <p>
+			        	I would avoid this evening as the station seems packed!
+							</p>
+			    </div>
+				</div>
+			</td>
+			<td class="second">
 
-		    </div>
+			<div class="border-full">
+				<h4 class="soft-grey">overall rating: <span>79%</span></h4>
+			</div>
 
-		</div>
-		</td>
-		<td class="second">
+			<div class="border-full">
 
-		<div class="border-full">
-			<h4 class="soft-grey">overall rating: <span>79%</span></h4>
-		</div>
-
-		<div class="border-full">
-
-			<h3>post via mobile/email</h3>
-			<font style="font-size:0.8em">
-			For SMS, send a message to 07797885024 starting with @hisk
-			<br/><br/>
-			For email, send a message to fault@accesscity.co.uk starting with @hisk
-			</font>
-		</div>
+				<h3>post via mobile/email</h3>
+				<font style="font-size:0.8em">
+				For SMS, send a message to 07797885024 starting with @hisk
+				<br/><br/>
+				For email, send a message to fault@accesscity.co.uk starting with @hisk
+				</font>
+			</div>
+			
 		<!-- Post -->
 		<div class="border-full">
 
@@ -58,6 +62,8 @@
 		</tr>
 	</table>
 	    	</div>
-	
+	{% else %}
+		<P>Location not found</P>
+	{% endif %}
 	
 {% endblock %}
