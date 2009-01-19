@@ -1,6 +1,7 @@
 import wsgiref.handlers
 
 from google.appengine.ext import webapp
+from google.appengine.ext import db
 
 import models
 import helpers
@@ -20,11 +21,18 @@ class MainHandler(webapp.RequestHandler):
 class LocationHandler(webapp.RequestHandler):
 	def get(self, current_url, locationurl):
 		useraccount = models.get_current_auth_user(self)
+		location_name = locationurl.replace("-"," ")
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'locationurl': locationurl
+			'locationurl': location_name
 		}
+		
+		location = models.Location.gql("WHERE name = :1", location_name).get()
+        
+		if location:
+		    template_values['location'] = location
+		
 		viewhelpers.render_template(self, "views/location", template_values)
 
 
@@ -37,7 +45,7 @@ class ProfileHandler(webapp.RequestHandler):
 		locations = False
 		useraccount = models.get_current_auth_user(self)
 		profile = models.UserAccount.get_by_key_name(profileurl)
-		if profile: 
+		if profile:
 			items = models.get_user_items(profile)
 			ratings = models.get_user_ratings(profile)
 		template_values = {
@@ -46,7 +54,7 @@ class ProfileHandler(webapp.RequestHandler):
 			'profile': profile,
 			'items': items,
 			'ratings': ratings,
-			'locations': locations,			
+			'locations': locations,
 		}
 		viewhelpers.render_template(self, "views/profile", template_values)
 
@@ -81,7 +89,7 @@ class CreateItemHandler(webapp.RequestHandler):
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
 		viewhelpers.render_template(self, "elements/itemform", template_values)
-
+	
 	def post(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		template_values = {

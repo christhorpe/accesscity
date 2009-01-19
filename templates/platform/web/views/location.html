@@ -1,8 +1,63 @@
 {% extends "../ui/base.html" %}
 
 {% block mainpanel %}
-	<hr />
-	<div>Location {{locationurl}}</div>
 	
-	<hr />
+	<!-- Place header -->
+	<div class="location">
+	    <h1>{{location.name	}}</h1>
+			<h2>do you use this station? Tell it like it is...</h2>
+
+
+	<table class="location">
+
+		<tr>
+			<td class="first">
+
+				<div class="border-top">
+					<h4 class="soft-grey">people who've helped describe this station</h4>
+					<P><i>Show people images/names</i></P>
+				</div>
+
+		<!-- Tips -->
+		<div class="border-top">
+
+		    <h3>posts from people</h3>
+							<div class="tip">
+		        <h4><Span style="font-size:0.8em">Tip</Span>: <a href="/items/33">Busy</a>
+						<Span style="font-size:0.6em;color:#888">posted 11 days ago</Span></h4>
+		        <p>
+		            								I would avoid this evening as the station seems packed!
+															</p>
+
+		    </div>
+
+		</div>
+		</td>
+		<td class="second">
+
+		<div class="border-full">
+			<h4 class="soft-grey">overall rating: <span>79%</span></h4>
+		</div>
+
+		<div class="border-full">
+
+			<h3>post via mobile/email</h3>
+			<font style="font-size:0.8em">
+			For SMS, send a message to 07797885024 starting with @hisk
+			<br/><br/>
+			For email, send a message to fault@accesscity.co.uk starting with @hisk
+			</font>
+		</div>
+		<!-- Post -->
+		<div class="border-full">
+
+		    {% include "../elements/itemform.html" %}
+
+			</div>
+			</td>
+		</tr>
+	</table>
+	    	</div>
+	
+	
 {% endblock %}
