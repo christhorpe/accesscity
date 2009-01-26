@@ -192,7 +192,22 @@ table.location td.first {
 	width:70%;
 }
 
-table.location td.second div {
+table.location td.second div.column_padded {
 	padding: 10px;
 	margin-bottom: 10px;
 }
+
+
+div.form_row {
+}
+
+div.form_label {
+	padding: 3px;
+	margin: 1px;
+}
+
+div.form_field {
+	padding: 3px;
+	margin: 1px;
+}
+

@@ -1,0 +1,7 @@
+<div class="form_row">
+	<div class="form_label">Location</div>	
+	<div class="form_field"><select name="location" id="id_location">
+		{% for thislocation in locations %}{% ifequal thislocation.indexname location.indexname %}<option value="{{thislocation.key}}" selected="true">{{thislocation.name}}</option>{% else %}<option value="{{thislocation.key}}">{{thislocation.name}}</option>{% endifequal %}{% endfor %}
+	</select></div>
+</div>
+

@@ -86,7 +86,7 @@ class Item(db.Model):
 class ItemForm(djangoforms.ModelForm):
   class Meta:
     model = Item
-    exclude = ['created', 'updated', 'tag', 'source', 'url', 'useraccount', 'location']
+    exclude = ['created', 'updated', 'tag', 'source', 'url', 'useraccount', 'location', 'media_type']
 
 
 	
