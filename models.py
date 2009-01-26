@@ -87,9 +87,12 @@ class ItemForm(djangoforms.ModelForm):
 class Rating(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
+	
+	when = db.StringProperty(default="peak") # peak, off-peak, weekend
+	howeasy = db.IntegerProperty(default=3)
+	steps = db.IntegerProperty(default=3)
 	busyness = db.IntegerProperty(default=3)
-	facilities = db.IntegerProperty(default=3)
-	accessibility = db.IntegerProperty(default=3)
+	
 	comment = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
