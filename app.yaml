@@ -21,5 +21,8 @@ handlers:
 - url: /js
   static_dir: static/js
 
+- url: /admin/.*
+  script: admincontroller.py
+
 - url: .*
   script: main.py

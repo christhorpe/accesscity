@@ -38,7 +38,7 @@ class APIKey(db.Model):
 	name = db.StringProperty()
 	developer = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
-	updated_at = db.DateTimeProperty()	
+	updated_at = db.DateTimeProperty(auto_now=True)	
 
 
 class Location(db.Model):
@@ -52,7 +52,7 @@ class Location(db.Model):
 	lat = db.StringProperty()
 	lng = db.StringProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
-	updated_at = db.DateTimeProperty()
+	updated_at = db.DateTimeProperty(auto_now=True)	
 	itemcount = db.IntegerProperty(default=0)
 	ratingcount = db.IntegerProperty(default=0)
 
@@ -61,7 +61,7 @@ class UserLocations(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
 	created_at = db.DateTimeProperty(auto_now_add=True)
-	updated_at = db.DateTimeProperty()
+	updated_at = db.DateTimeProperty(auto_now=True)	
 
 
 class Item(db.Model):
@@ -73,7 +73,7 @@ class Item(db.Model):
 	url = db.StringProperty()
 	text = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
-	updated_at = db.DateTimeProperty()
+	updated_at = db.DateTimeProperty(auto_now=True)	
 	tag = db.StringProperty()
 	embed_link = db.StringProperty()
 
@@ -86,7 +86,7 @@ class Rating(db.Model):
 	accessibility = db.IntegerProperty(default=3)
 	comment = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
-	updated_at = db.DateTimeProperty()
+	updated_at = db.DateTimeProperty(auto_now=True)	
 
 
 # elements for sharded counter
