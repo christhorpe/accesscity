@@ -25,7 +25,7 @@ class LocationHandler(webapp.RequestHandler):
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'locationurl': location_name,
+			'locationurl': locationurl,
 			'ratingform': models.RatingForm()
 		}
 		if location:
