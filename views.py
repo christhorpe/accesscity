@@ -24,6 +24,7 @@ class LocationHandler(webapp.RequestHandler):
 	def get(self, current_url, locationurl):
 		useraccount = models.get_current_auth_user(self)
 		location = models.Location.gql("WHERE indexname = :1", locationurl.lower()).get()
+		locationrating = models.LocationRatings.gql("WHERE location = :1", location).get()
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
@@ -32,7 +33,8 @@ class LocationHandler(webapp.RequestHandler):
 			'itemform': models.ItemForm(),
 			'media_types': helpers.get_media_types(),
 			'form_tags': helpers.get_form_tags(),
-			'locations': models.Location.all().order('name')
+			'locations': models.Location.all().order('name'),
+			'locationrating': locationrating
 		}
 		if location:
 			template_values['location'] = location
@@ -164,6 +166,33 @@ class RatingHandler(webapp.RequestHandler):
             rating.location = location
             rating.useraccount = useraccount
             rating.put()
+            
+            # create LocationRatings
+            locationrating = None
+            locationrating = models.LocationRatings.gql("WHERE location = :1", location).get()
+                        
+            if not locationrating:
+                locationrating = models.LocationRatings()
+                locationrating.location = location
+            
+            if rating.when == "peak":
+                locationrating.peak_count += 1
+                locationrating.peak_busy_sum += rating.busyness
+                locationrating.peak_easy_sum += rating.howeasy
+                locationrating.peak_step_sum += rating.steps
+            if rating.when == "offpeak":
+                locationrating.offpeak_count += 1
+                locationrating.offpeak_busy_sum += rating.busyness
+                locationrating.offpeak_easy_sum += rating.howeasy
+                locationrating.offpeak_step_sum += rating.steps
+            if rating.when == "weekend":
+                locationrating.weekend_count += 1
+                locationrating.weekend_busy_sum += rating.busyness
+                locationrating.weekend_easy_sum += rating.howeasy
+                locationrating.weekend_step_sum += rating.steps
+            
+            locationrating.put()
+            #locationrating.{rating.when}_count = 
             template_values['message'] = "Rating Created"
         else:
             template_values["error_message"] = "Error occurrred creating rating"

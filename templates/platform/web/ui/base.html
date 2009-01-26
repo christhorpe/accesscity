@@ -26,12 +26,13 @@
 
 <div class="content">
 {% if error_message %}
-	<div class="error">
+	<div class="top_box error">
 		<P>Error: {{ error_message }}</P>
 	</div>
 {% endif %}
+
 {% if message %}
-	<div class="message">
+	<div class="top_box message">
 		<P>{{ message }}</P>
 	</div>
 {% endif %}

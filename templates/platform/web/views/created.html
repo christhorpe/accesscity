@@ -8,6 +8,8 @@
 	
 	{% if error_message %}
 		{% include "../elements/ratingform.html" %}
+	{% else %}
+		<P>Go back to <a href="/location/{{location.indexname}}">{{location.name}}</a></P>
 	{% endif %}
 	
 {% endblock %}

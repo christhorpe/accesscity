@@ -39,7 +39,12 @@
 			<td class="second">
 
 			<div class="border-full column_padded">
-				<h4 class="soft-grey">overall rating: <span>79%</span></h4>
+				{% if locationrating %}
+				<h4 class="soft-grey">overall rating: <span>0%</span></h4>
+				<P>Peak: {{ locationrating.peak_count }} | offpeak: {{ locationrating.offpeak_count }} | weekend: {{ locationrating.weekend_count }}</P>
+				{% else %}
+				 <h4>No ratings yet</h4>
+				{% endif %}
 				<P><a href="#" id="add_rating">Add Rating</a></P>
 				
 				<script type="text/javascript">

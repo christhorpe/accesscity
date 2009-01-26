@@ -65,18 +65,18 @@ class Location(db.Model):
 
 class LocationRatings(db.Model):
 	location = db.ReferenceProperty(Location)
-	offpeak_count = db.IntegerProperty()
-	peak_count = db.IntegerProperty()
-	week_count = db.IntegerProperty()
-	offpeak_easy_sum = db.IntegerProperty()
-	offpeak_step_sum = db.IntegerProperty()
-	offpeak_busy_sum = db.IntegerProperty()
-	peak_easy_sum = db.IntegerProperty()
-	peak_step_sum = db.IntegerProperty()
-	peak_busy_sum = db.IntegerProperty()
-	weekend_easy_sum = db.IntegerProperty()
-	weekend_step_sum = db.IntegerProperty()
-	weekend_busy_sum = db.IntegerProperty()
+	offpeak_count = db.IntegerProperty(default=0)
+	peak_count = db.IntegerProperty(default=0)
+	weekend_count = db.IntegerProperty(default=0)
+	offpeak_easy_sum = db.IntegerProperty(default=0)
+	offpeak_step_sum = db.IntegerProperty(default=0)
+	offpeak_busy_sum = db.IntegerProperty(default=0)
+	peak_easy_sum = db.IntegerProperty(default=0)
+	peak_step_sum = db.IntegerProperty(default=0)
+	peak_busy_sum = db.IntegerProperty(default=0)
+	weekend_easy_sum = db.IntegerProperty(default=0)
+	weekend_step_sum = db.IntegerProperty(default=0)
+	weekend_busy_sum = db.IntegerProperty(default=0)
 
 
 class UserLocations(db.Model):
@@ -109,7 +109,7 @@ class ItemForm(djangoforms.ModelForm):
 class Rating(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
-	when = db.StringProperty(default="Peak",required=True,choices=['Peak', 'Off-Peak', 'Weekend'])
+	when = db.StringProperty(default="Peak",required=True,choices=['peak', 'offpeak', 'weekend'])
 	howeasy = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	steps = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	busyness = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
