@@ -28,12 +28,14 @@ class LocationHandler(webapp.RequestHandler):
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'locationurl': locationurl,
-			'ratingform': models.RatingForm()
+			'ratingform': models.RatingForm(),
+			'itemform': models.ItemForm(),
+			'media_types': helpers.get_media_types(),
+			'form_tags': helpers.get_form_tags(),
+			'locations': models.Location.all().order('name')
 		}
 		if location:
-			template_values['location'] = location		
-			template_values['itemform'] = models.ItemForm()
-			template_values['media_types'] = helpers.get_media_types()
+			template_values['location'] = location
 		viewhelpers.render_template(self, "views/location", template_values)
 
 
@@ -69,6 +71,28 @@ class ItemHandler(webapp.RequestHandler):
 			'itemurl': itemurl
 		}
 		viewhelpers.render_template(self, "views/location", template_values)
+	def post(self, current_url, itemurl):
+		useraccount = models.get_current_auth_user(self)
+		form = models.ItemForm(data=self.request.POST)
+		location = models.Location.get(self.request.get("location"))
+		if form.is_valid():
+			item = form.save(commit=False)
+			item.location = location
+			item.tag = self.request.get("tag")
+			item.media_type = self.request.get("media_type")
+			item.put()
+		template_values = {
+			'itemform':form,
+			'media_types': helpers.get_media_types(),
+			'form_tags': helpers.get_form_tags(),
+			'locations': models.Location.all().order('name'),
+			'location': location,
+			'useraccount': useraccount,
+			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
+		}
+		viewhelpers.render_template(self, "views/item", template_values)
+
+
 
 
 class ContentHandler(webapp.RequestHandler):
@@ -120,17 +144,19 @@ class CreateItemHandler(webapp.RequestHandler):
 		    item.put()
 		    self.redirect('/')
 	
-	
+
 class RatingHandler(webapp.RequestHandler):
     def post(self, current_url, id):
         useraccount = models.get_current_auth_user(self)
-        template_values = {
-			'useraccount': useraccount
-		}
-        ratingform = models.RatingForm(self.request.POST)
         
         location_key = self.request.get('id_location_key')
         location = models.Location.get(location_key)
+        
+        template_values = {
+			'useraccount': useraccount,
+			'location' : location
+		}
+        ratingform = models.RatingForm(self.request.POST)
         
         if ratingform.is_valid():
             rating = ratingform.save(commit=False)
@@ -138,6 +164,10 @@ class RatingHandler(webapp.RequestHandler):
             rating.location = location
             rating.useraccount = useraccount
             rating.put()
+            template_values['message'] = "Rating Created"
+        else:
+            template_values["error_message"] = "Error occurrred creating rating"
+            template_values["ratingform"] = ratingform
         
-        self.redirect('/location/' + location.indexname)
+        viewhelpers.render_template(self, "views/created", template_values)
     

@@ -63,6 +63,22 @@ class Location(db.Model):
 	ratingcount = db.IntegerProperty(default=0)
 
 
+class LocationRatings(db.Model):
+	location = db.ReferenceProperty(Location)
+	offpeak_count = db.IntegerProperty()
+	peak_count = db.IntegerProperty()
+	week_count = db.IntegerProperty()
+	offpeak_easy_sum = db.IntegerProperty()
+	offpeak_step_sum = db.IntegerProperty()
+	offpeak_busy_sum = db.IntegerProperty()
+	peak_easy_sum = db.IntegerProperty()
+	peak_step_sum = db.IntegerProperty()
+	peak_busy_sum = db.IntegerProperty()
+	weekend_easy_sum = db.IntegerProperty()
+	weekend_step_sum = db.IntegerProperty()
+	weekend_busy_sum = db.IntegerProperty()
+
+
 class UserLocations(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
@@ -86,18 +102,17 @@ class Item(db.Model):
 class ItemForm(djangoforms.ModelForm):
   class Meta:
     model = Item
-    exclude = ['created', 'updated', 'tag', 'source', 'url', 'useraccount', 'location']
+    exclude = ['created', 'updated', 'tag', 'source', 'url', 'useraccount', 'location', 'media_type']
 
 
 	
 class Rating(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
-	
 	when = db.StringProperty(default="Peak",required=True,choices=['Peak', 'Off-Peak', 'Weekend'])
-	howeasy = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
-	steps = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
-	busyness = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
+	howeasy = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
+	steps = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
+	busyness = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
 

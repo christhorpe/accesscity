@@ -38,7 +38,7 @@
 			</td>
 			<td class="second">
 
-			<div class="border-full">
+			<div class="border-full column_padded">
 				<h4 class="soft-grey">overall rating: <span>79%</span></h4>
 				<P><a href="#" id="add_rating">Add Rating</a></P>
 				
@@ -53,21 +53,12 @@
 				<div id="rating_form" class="rating_form" style="display:none">
 					<h4 class="soft-grey">Rate Station</h4>
         
-					<form action="/rating/create" method="post">
-						<input name="id_location_key" type="hidden" value="{{ location.key }}">
-        		{% for field in ratingform %}
-							{{ field.label_tag }} {{ field }}
-							<span id="{{field.name}}_errors">{{ field.errors }}</span><br/>
-						{% endfor %}
-						
-						<input type="submit" value="Add"/>
-						
-					</form>
+					{% include "../elements/ratingform.html" %}
 				</div>
 			</div>
 			
 
-			<div class="border-full">
+			<div class="border-full column_padded">
 
 				<h3>post via mobile/email</h3>
 				<font style="font-size:0.8em">
@@ -78,7 +69,7 @@
 			</div>
 			
 		<!-- Post -->
-		<div class="border-full">
+		<div class="border-full column_padded">
 		    {% include "../elements/itemform.html" %}
 			</div>
 			</td>

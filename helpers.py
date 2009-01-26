@@ -16,3 +16,6 @@ def get_facebookapi():
 
 def get_media_types():
 	return ["Text", "Video", "Image"]
+	
+def get_form_tags():
+	return ["Tip", "Fault", "Update"]	

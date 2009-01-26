@@ -1,0 +1,14 @@
+{% if useraccount %}
+<form action="/rating/create" method="post">
+	<input name="id_location_key" type="hidden" value="{{ location.key }}">
+	{% for field in ratingform %}
+		{{ field.label_tag }} {{ field }}
+		<span id="{{field.name}}_errors">{{ field.errors }}</span><br/>
+	{% endfor %}
+	
+	<input type="submit" value="Add"/>
+	
+</form>
+{% else %}
+	{% include "../elements/logincontrol.html" %}
+{% endif %}

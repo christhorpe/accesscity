@@ -1,0 +1,13 @@
+{% extends "../ui/base.html" %}
+
+{% block title %}
+	:: rating at {{location.name}}
+{% endblock %}
+
+{% block mainpanel %}
+	
+	{% if error_message %}
+		{% include "../elements/ratingform.html" %}
+	{% endif %}
+	
+{% endblock %}
