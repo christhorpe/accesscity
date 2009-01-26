@@ -25,6 +25,7 @@ def main():
   application = webapp.WSGIApplication([('(/)', views.MainHandler),
 										('(/location/(.*))', views.LocationHandler),
 										('(/profile/(.*))', views.ProfileHandler),
+										('(/rating/(.*))', views.RatingHandler),
 										('(/item/(.*))', views.ItemHandler),
 										('(/about)', views.ContentHandler),
 										('(/developer)', views.ContentHandler),

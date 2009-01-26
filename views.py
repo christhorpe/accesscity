@@ -25,7 +25,8 @@ class LocationHandler(webapp.RequestHandler):
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'locationurl': location_name
+			'locationurl': location_name,
+			'ratingform': models.RatingForm()
 		}
 		
 		location = models.Location.gql("WHERE name = :1", location_name).get()
@@ -120,3 +121,9 @@ class CreateItemHandler(webapp.RequestHandler):
 		    self.redirect('/')
 	
 	
+class RatingHandler(webapp.RequestHandler):
+    def post(self, current_url):
+        useraccount = models.get_current_auth(user)
+        
+        self.redirect('/')
+    

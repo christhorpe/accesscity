@@ -40,7 +40,26 @@
 
 			<div class="border-full">
 				<h4 class="soft-grey">overall rating: <span>79%</span></h4>
+				<P><a href="#" id="add_rating">Add Rating</a></P>
+				
+				<script type="text/javascript">
+					$(document).ready(function() {
+						$("#add_rating").click(function(){
+							$("#rating_form").toggle();
+						});
+					});
+				</script>
+				
+				<div id="rating_form" style="display:block">
+					<h4 class="soft-grey">Rate Station</h4>
+        
+					<form action="/rating" method="post">
+        		
+					</form>
+				</div>
 			</div>
+			
+		
 
 			<div class="border-full">
 
