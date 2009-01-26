@@ -1,6 +1,8 @@
 import random
 
 from google.appengine.ext import db
+from google.appengine.ext.webapp import template
+from google.appengine.ext.db import djangoforms
 from google.appengine.api import users
 
 import helpers
@@ -68,11 +70,11 @@ class Item(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
 	source = db.ReferenceProperty(APIKey)
-	media_type = db.StringProperty()
-	tag = db.StringProperty()
-	title = db.StringProperty()
+	media_type = db.StringProperty(required=True)
+	tag = db.StringProperty(required=True)
+	title = db.StringProperty(required=True)
 	url = db.StringProperty()
-	text = db.TextProperty()
+	text = db.TextProperty(required=True)
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
 

@@ -1,1 +1,27 @@
-{% import "../elements/baseform.html" %}
+<form action="/item/add" method="POST">
+<div class="form_row">
+	<div class="form_label">Location</div>	
+	<div class="form_field"><select name="location" id="id_location">
+		{% for media_type in media_types %}
+		<option value="">{{media_type}}</option>
+		{% endfor %}
+	</select></div>
+</div>
+
+<div class="form_row">
+	<div class="form_label">What format is it?</div>	
+	<div class="form_field"><select name="media_type" id="id_media_type">
+		{% for media_type in media_types %}
+		<option value="">{{media_type}}</option>
+		{% endfor %}
+	</select></div>
+</div>
+
+{% for field in itemform %}
+<div class="form_row">
+	<div class="form_label">{{ field.label_tag }}<span id="{{field.name}}_errors">{{ field.errors }}</span></div>
+	<div class="form_field">{{ field }}</div>
+</div>
+{% endfor %}
+<input type="submit" name="submit" value="add information" />
+</form>

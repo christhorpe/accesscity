@@ -1,6 +1,8 @@
 import wsgiref.handlers
 
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
+from google.appengine.ext.db import djangoforms
 from google.appengine.ext import db
 
 import models
@@ -28,7 +30,9 @@ class LocationHandler(webapp.RequestHandler):
 			'locationurl': locationurl
 		}
 		if location:
-		    template_values['location'] = location		
+			template_values['location'] = location		
+			template_values['itemform'] = models.ItemForm()
+			template_values['media_types'] = helpers.get_media_types()
 		viewhelpers.render_template(self, "views/location", template_values)
 
 
