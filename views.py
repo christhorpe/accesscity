@@ -21,19 +21,15 @@ class MainHandler(webapp.RequestHandler):
 class LocationHandler(webapp.RequestHandler):
 	def get(self, current_url, locationurl):
 		useraccount = models.get_current_auth_user(self)
-		location_name = locationurl.replace("-"," ")
+		location = models.Location.gql("WHERE indexname = :1", locationurl.lower()).get()
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'locationurl': location_name,
 			'ratingform': models.RatingForm()
 		}
-		
-		location = models.Location.gql("WHERE name = :1", location_name).get()
-        
 		if location:
-		    template_values['location'] = location
-		
+		    template_values['location'] = location		
 		viewhelpers.render_template(self, "views/location", template_values)
 
 

@@ -73,13 +73,19 @@ class Item(db.Model):
 	useraccount = db.ReferenceProperty(UserAccount)
 	source = db.ReferenceProperty(APIKey)
 	media_type = db.StringProperty()
+	tag = db.StringProperty()
 	title = db.StringProperty()
 	url = db.StringProperty()
 	text = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
-	tag = db.StringProperty()
-	embed_link = db.StringProperty()
+
+
+class ItemForm(djangoforms.ModelForm):
+  class Meta:
+    model = Item
+    exclude = ['created', 'updated', 'tag', 'source', 'url', 'useraccount', 'location']
+
 
 	
 class Rating(db.Model):
