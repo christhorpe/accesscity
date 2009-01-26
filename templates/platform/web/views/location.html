@@ -50,16 +50,22 @@
 					});
 				</script>
 				
-				<div id="rating_form" style="display:block">
+				<div id="rating_form" class="rating_form" style="display:none">
 					<h4 class="soft-grey">Rate Station</h4>
         
-					<form action="/rating" method="post">
-        		
+					<form action="/rating/create" method="post">
+						<input name="id_location_key" type="hidden" value="{{ location.key }}">
+        		{% for field in ratingform %}
+							{{ field.label_tag }} {{ field }}
+							<span id="{{field.name}}_errors">{{ field.errors }}</span><br/>
+						{% endfor %}
+						
+						<input type="submit" value="Add"/>
+						
 					</form>
 				</div>
 			</div>
 			
-		
 
 			<div class="border-full">
 

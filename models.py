@@ -94,10 +94,10 @@ class Rating(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
 	
-	when = db.StringProperty(default="peak") # peak, off-peak, weekend
-	howeasy = db.IntegerProperty(default=3)
-	steps = db.IntegerProperty(default=3)
-	busyness = db.IntegerProperty(default=3)
+	when = db.StringProperty(default="Peak",required=True,choices=['Peak', 'Off-Peak', 'Weekend'])
+	howeasy = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
+	steps = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
+	busyness = db.IntegerProperty(default=3, required=True,choices=['1','2','3','4','5'])
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
 

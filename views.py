@@ -122,8 +122,22 @@ class CreateItemHandler(webapp.RequestHandler):
 	
 	
 class RatingHandler(webapp.RequestHandler):
-    def post(self, current_url):
-        useraccount = models.get_current_auth(user)
+    def post(self, current_url, id):
+        useraccount = models.get_current_auth_user(self)
+        template_values = {
+			'useraccount': useraccount
+		}
+        ratingform = models.RatingForm(self.request.POST)
         
-        self.redirect('/')
+        location_key = self.request.get('id_location_key')
+        location = models.Location.get(location_key)
+        
+        if ratingform.is_valid():
+            rating = ratingform.save(commit=False)
+            
+            rating.location = location
+            rating.useraccount = useraccount
+            rating.put()
+        
+        self.redirect('/location/' + location.indexname)
     
