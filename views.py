@@ -27,7 +27,8 @@ class LocationHandler(webapp.RequestHandler):
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'locationurl': locationurl
+			'locationurl': locationurl,
+			'ratingform': models.RatingForm()
 		}
 		if location:
 			template_values['location'] = location		
@@ -120,3 +121,9 @@ class CreateItemHandler(webapp.RequestHandler):
 		    self.redirect('/')
 	
 	
+class RatingHandler(webapp.RequestHandler):
+    def post(self, current_url):
+        useraccount = models.get_current_auth(user)
+        
+        self.redirect('/')
+    

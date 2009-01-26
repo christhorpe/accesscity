@@ -4,6 +4,10 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import users
+from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
+
+from google.appengine.ext.db import djangoforms
 
 import helpers
 import facebook
@@ -94,11 +98,15 @@ class Rating(db.Model):
 	howeasy = db.IntegerProperty(default=3)
 	steps = db.IntegerProperty(default=3)
 	busyness = db.IntegerProperty(default=3)
-	
-	comment = db.TextProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
 
+
+class RatingForm(djangoforms.ModelForm):
+    class Meta:
+        model = Rating
+        exclude = ['useraccount', 'location', 'created_at', 'updated_at']
+    
 
 # elements for sharded counter
 	

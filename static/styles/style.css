@@ -152,6 +152,10 @@ div.border-full {
 	border: 1px solid #99ccff;
 }
 
+div.border-full p {
+  font-size:0.8em;
+}
+
 table {
 	border-collapse:collapse;
 	width:100%;
