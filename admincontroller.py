@@ -23,7 +23,7 @@ import adminviews
 
 def main():
   application = webapp.WSGIApplication([('/admin/', adminviews.MainHandler),
-										('/admin/dataloader', adminviews.DataLoadHandler),
+#										('/admin/dataloader', adminviews.DataLoadHandler),
 										],debug=True)
 										
   wsgiref.handlers.CGIHandler().run(application)
