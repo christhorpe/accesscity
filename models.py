@@ -63,6 +63,22 @@ class Location(db.Model):
 	ratingcount = db.IntegerProperty(default=0)
 
 
+class LocationRatings(db.Model):
+	location = db.ReferenceProperty(Location)
+	offpeak_count = db.IntegerProperty()
+	peak_count = db.IntegerProperty()
+	week_count = db.IntegerProperty()
+	offpeak_easy_sum = db.IntegerProperty()
+	offpeak_step_sum = db.IntegerProperty()
+	offpeak_busy_sum = db.IntegerProperty()
+	peak_easy_sum = db.IntegerProperty()
+	peak_step_sum = db.IntegerProperty()
+	peak_busy_sum = db.IntegerProperty()
+	weekend_easy_sum = db.IntegerProperty()
+	weekend_step_sum = db.IntegerProperty()
+	weekend_busy_sum = db.IntegerProperty()
+
+
 class UserLocations(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
