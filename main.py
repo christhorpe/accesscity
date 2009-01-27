@@ -29,7 +29,6 @@ def main():
 										('(/item/(.*))', views.ItemHandler),
 										('(/about)', views.ContentHandler),
 										('(/developer)', views.ContentHandler),
-										('(/createitem)', views.CreateItemHandler),
 										],debug=True)
 										
   wsgiref.handlers.CGIHandler().run(application)

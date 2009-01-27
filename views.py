@@ -14,6 +14,11 @@ class MainHandler(webapp.RequestHandler):
 	def get(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		template_values = {
+			'ratingform': models.RatingForm(),
+			'itemform': models.ItemForm(),
+			'media_types': helpers.get_media_types(),
+			'form_tags': helpers.get_form_tags(),
+			'locations': models.Location.all().order('name'),
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url)
 		}
@@ -24,8 +29,10 @@ class LocationHandler(webapp.RequestHandler):
 	def get(self, current_url, locationurl):
 		useraccount = models.get_current_auth_user(self)
 		location = models.Location.gql("WHERE indexname = :1", locationurl.lower()).get()
+		items = models.Item.all().filter("location = ", location).order("-created_at")
 		locationrating = models.LocationRatings.gql("WHERE location = :1", location).get()
 		template_values = {
+			'items': items,
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'locationurl': locationurl,
@@ -75,15 +82,21 @@ class ItemHandler(webapp.RequestHandler):
 		viewhelpers.render_template(self, "views/location", template_values)
 	def post(self, current_url, itemurl):
 		useraccount = models.get_current_auth_user(self)
+		tag = self.request.get("tag")
+		media_type = self.request.get("media_type")
 		form = models.ItemForm(data=self.request.POST)
 		location = models.Location.get(self.request.get("location"))
+		created = False
 		if form.is_valid():
 			item = form.save(commit=False)
+			item.useraccount = useraccount
 			item.location = location
-			item.tag = self.request.get("tag")
-			item.media_type = self.request.get("media_type")
+			item.tag = tag
+			item.media_type = media_type
 			item.put()
+			created = True
 		template_values = {
+			'created':created,
 			'itemform':form,
 			'media_types': helpers.get_media_types(),
 			'form_tags': helpers.get_form_tags(),
@@ -92,7 +105,10 @@ class ItemHandler(webapp.RequestHandler):
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 		}
-		viewhelpers.render_template(self, "views/item", template_values)
+		if self.request.get("item_ajax_submit"):
+			viewhelpers.render_template(self, "views/ajaxitem", template_values)
+		else:
+			viewhelpers.render_template(self, "views/item", template_values)
 
 
 
@@ -108,43 +124,6 @@ class ContentHandler(webapp.RequestHandler):
 		viewhelpers.render_template(self, "content/"+ current_url, template_values)
 
 
-class CreateItemHandler(webapp.RequestHandler):
-	def get(self, current_url):
-		useraccount = models.get_current_auth_user(self)
-		template_values = {
-			'useraccount': useraccount,
-			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-		}
-		viewhelpers.render_template(self, "elements/itemform", template_values)
-	
-	def post(self, current_url):
-		useraccount = models.get_current_auth_user(self)
-		template_values = {
-			'useraccount': useraccount,
-			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-		}
-		errors = 0
-		# validate parameters
-		required_fields = ["title","text","media_type","tag", "source"]
-		
-		for field in required_fields:
-		    if len(self.request.get(field)) == 0:
-		        template_values["error_message"] = "Missing Fields"
-		        errors = 1
-                viewhelpers.render_template(self, "views/home", template_values)
-		
-		
-		if errors == 0:
-		    # handle parameters
-		    item = models.Item()
-		    item.title = self.request.get('title')
-		    item.text = self.request.get('text')
-		    item.media_type = self.request.get('media_type')
-		    item.tag = self.request.get('tag')
-		    template_values["message"] = "Item Created"
-		    
-		    item.put()
-		    self.redirect('/')
 	
 
 class RatingHandler(webapp.RequestHandler):

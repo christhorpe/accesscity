@@ -234,3 +234,24 @@ div.form_field {
 	margin: 1px;
 }
 
+div.form_submit_row {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+span.form_submit_link {
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #666;
+	background-color: #9cf;
+	visibility:hidden;
+}
+
+span.show_link {
+	visibility:visible;
+}
+
+span.form_submit_link_hover {
+	background-color: #cef;
+	border: 1px solid #333;
+}

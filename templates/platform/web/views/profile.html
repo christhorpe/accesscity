@@ -7,5 +7,9 @@
 	{% else %}
 		gmail
 	{% endifequal %}
+	
+	{% for item in items %}
+		<div>{{item.title}}</div>
+	{% endfor %}
 
 {% endblock %}

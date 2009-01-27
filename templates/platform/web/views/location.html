@@ -20,20 +20,22 @@
 
 				<div class="border-top">
 					<h4 class="soft-grey">people who've helped describe this station</h4>
-					<P><i>Show people images/names</i></P>
 				</div>
 
 				<!-- Tips -->
 				<div class="border-top">
 
 		    	<h3>posts from people</h3>
+					{% for item in items %}
 					<div class="tip">
-			        <h4><Span style="font-size:0.8em">Tip</Span>: <a href="/items/33">Busy</a>
-							<Span style="font-size:0.6em;color:#888">posted 11 days ago</Span></h4>
+			        <h4><Span style="font-size:0.8em">{{item.tag}}</Span>: <a href="/items/{{item.key}}">{{item.title}}</a> from <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a>
+						<Span style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago</Span></h4>
 			        <p>
-			        	I would avoid this evening as the station seems packed!
-							</p>
+			        	{{item.text}}
+					</p>
 			    </div>
+						<span></span>
+					{% endfor %}
 				</div>
 			</td>
 			<td class="second">
@@ -75,7 +77,10 @@
 			
 		<!-- Post -->
 		<div class="border-full column_padded">
+			<div id="id_item_form_content">
+
 		    {% include "../elements/itemform.html" %}
+			</div>
 			</div>
 			</td>
 		</tr>

@@ -1,1 +1,11 @@
-{% include "../elements/itemform.html" %}
+{% extends "../ui/base.html" %}
+
+{% block title %}
+	:: item form errors
+{% endblock %}
+
+{% block mainpanel %}
+
+{% include "../views/ajaxitem.html" %}
+
+{% endblock %}
