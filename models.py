@@ -6,7 +6,7 @@ from google.appengine.ext.db import djangoforms
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-
+from google.appengine.api import memcache
 from google.appengine.ext.db import djangoforms
 
 import helpers
@@ -61,6 +61,8 @@ class Location(db.Model):
 	updated_at = db.DateTimeProperty(auto_now=True)	
 	itemcount = db.IntegerProperty(default=0)
 	ratingcount = db.IntegerProperty(default=0)
+	photo_url = db.StringProperty()
+	photo_credit = db.StringProperty()
 
 
 class LocationRatings(db.Model):
@@ -79,12 +81,48 @@ class LocationRatings(db.Model):
 	weekend_busy_sum = db.IntegerProperty(default=0)
 
 
-class UserLocations(db.Model):
+
+
+class UserLocation(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
+	follow = db.BooleanProperty(default=False)
+	interaction = db.StringProperty()
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
 
+
+def get_userlocations_for_location(location, limit, page):
+	key = str(location.indexname) + "_ul"
+	userlocations = memcache.get(key)
+	if not userlocations:
+		query = db.Query(UserLocation)
+		query.filter("location = ", location)
+		query.filter("follow = ", False)
+		query.order("-updated_at")
+		userlocations = query.fetch(limit, 0)
+		memcache.add(key, userlocations, 300)
+	return userlocations
+
+
+def get_userlocation_activity(location, useraccount, follow):
+	userlocation = False
+	userlocation = db.Query(UserLocation).filter("location =", location).filter("useraccount =", useraccount).filter("follow =", follow).get()
+	return userlocation
+	
+def log_userlocation_activity(location, useraccount, follow):
+	userlocation = get_userlocation_activity(location, useraccount, follow)
+	if not userlocation:
+		userlocation = UserLocation()
+		userlocation.location = location
+		userlocation.useraccount = useraccount
+		userlocation.follow = False
+		userlocation.interaction = "item"
+		userlocation.put()
+	return userlocation
+	
+	
+	
 
 class Item(db.Model):
 	location = db.ReferenceProperty(Location)
@@ -97,6 +135,34 @@ class Item(db.Model):
 	text = db.TextProperty(required=True)
 	created_at = db.DateTimeProperty(auto_now_add=True)
 	updated_at = db.DateTimeProperty(auto_now=True)	
+
+
+def get_latest_text_items(limit):
+	key = "all_text_it"
+	items = memcache.get(key)
+	if not items:
+		query = db.Query(Item)
+		query.filter("media_type = ", "Text")
+		query.order("-created_at")
+		items = query.fetch(limit, 0)
+		memcache.add(key, items, 60)
+	return items
+
+def get_items_for_location(location, limit, page):
+	key = str(location.indexname) + "_it"
+	items = memcache.get(key)
+	if not items:
+		query = db.Query(Item)
+		query.filter("location = ", location)
+		query.order("-created_at")
+		items = query.fetch(limit, 0)
+		memcache.add(key, items, 300)
+	return items
+
+
+def kill_location_items_cache(location):
+	key = str(location.indexname) + "_it"
+	memcache.delete(key)
 
 
 class ItemForm(djangoforms.ModelForm):

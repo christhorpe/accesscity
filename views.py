@@ -13,6 +13,7 @@ import facebook
 class MainHandler(webapp.RequestHandler):
 	def get(self, current_url):
 		useraccount = models.get_current_auth_user(self)
+		items = models.get_latest_text_items(10)
 		template_values = {
 			'ratingform': models.RatingForm(),
 			'itemform': models.ItemForm(),
@@ -20,7 +21,8 @@ class MainHandler(webapp.RequestHandler):
 			'form_tags': helpers.get_form_tags(),
 			'locations': models.Location.all().order('name'),
 			'useraccount': useraccount,
-			'user_action_url': helpers.get_user_action_url(useraccount, current_url)
+			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
+			'items': items,
 		}
 		viewhelpers.render_template(self, "views/home", template_values)
 
@@ -29,8 +31,9 @@ class LocationHandler(webapp.RequestHandler):
 	def get(self, current_url, locationurl):
 		useraccount = models.get_current_auth_user(self)
 		location = models.Location.gql("WHERE indexname = :1", locationurl.lower()).get()
-		items = models.Item.all().filter("location = ", location).order("-created_at")
+		items = models.get_items_for_location(location, 20, 0)
 		locationrating = models.LocationRatings.gql("WHERE location = :1", location).get()
+		userlocations = models.get_userlocations_for_location(location, 10, 0)
 		template_values = {
 			'items': items,
 			'useraccount': useraccount,
@@ -41,7 +44,8 @@ class LocationHandler(webapp.RequestHandler):
 			'media_types': helpers.get_media_types(),
 			'form_tags': helpers.get_form_tags(),
 			'locations': models.Location.all().order('name'),
-			'locationrating': locationrating
+			'locationrating': locationrating,
+			'userlocations': userlocations,
 		}
 		if location:
 			template_values['location'] = location
@@ -87,6 +91,7 @@ class ItemHandler(webapp.RequestHandler):
 		form = models.ItemForm(data=self.request.POST)
 		location = models.Location.get(self.request.get("location"))
 		created = False
+		item = False
 		if form.is_valid():
 			item = form.save(commit=False)
 			item.useraccount = useraccount
@@ -95,6 +100,8 @@ class ItemHandler(webapp.RequestHandler):
 			item.media_type = media_type
 			item.put()
 			created = True
+			models.kill_location_items_cache(location)
+			userlocation = models.log_userlocation_activity(location, useraccount, False)
 		template_values = {
 			'created':created,
 			'itemform':form,
@@ -104,13 +111,24 @@ class ItemHandler(webapp.RequestHandler):
 			'location': location,
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
+			'ajax_item': self.request.get("item_ajax_submit")
 		}
+		if item:
+			template_values['item'] = item
 		if self.request.get("item_ajax_submit"):
 			viewhelpers.render_template(self, "views/ajaxitem", template_values)
 		else:
 			viewhelpers.render_template(self, "views/item", template_values)
 
 
+class ItemLocationHandler(webapp.RequestHandler):
+	def get(self, current_url, locationurl):
+		location = models.Location.gql("WHERE indexname = :1", locationurl.lower()).get()
+		items = models.get_items_for_location(location, 20, 0)
+		template_values = {
+							"items": items,
+		}
+		viewhelpers.render_template(self, "ajaxviews/locationitems", template_values)
 
 
 class ContentHandler(webapp.RequestHandler):

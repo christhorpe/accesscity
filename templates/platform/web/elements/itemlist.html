@@ -1,0 +1,18 @@
+					{% for item in items %}
+						{% if not forloop.first %}
+					<div class="tip">
+			        	<div style="font-size:0.8em">{{item.tag}}</div>
+						<h4>
+							<a href="/items/{{item.key}}">{{item.title}}</a></h4>
+			        		<div>
+			        			{{item.text}}
+							</div>
+						<div style="font-size:0.6em;color:#888">posted by from <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> {{item.created_at|timesince}} ago
+						{% if not location %}	
+							about {{item.location.title}}
+						{% endif %}
+						</div>
+			    </div>
+				<hr />
+						{% endif %}
+				{% endfor %}

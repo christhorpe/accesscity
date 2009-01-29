@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 4 times in query history.
+# Used 108 times in query history.
 - kind: Item
   properties:
   - name: location
@@ -18,6 +18,13 @@ indexes:
     direction: desc
 
 # Used once in query history.
+- kind: Item
+  properties:
+  - name: media_type
+  - name: created_at
+    direction: desc
+
+# Used 3 times in query history.
 - kind: Item
   properties:
   - name: useraccount
@@ -28,4 +35,40 @@ indexes:
 - kind: Location
   properties:
   - name: name
+    direction: desc
+
+# Used once in query history.
+- kind: UserLocation
+  properties:
+  - name: created_at
+    direction: desc
+
+# Used 16 times in query history.
+- kind: UserLocation
+  properties:
+  - name: follow
+  - name: location
+  - name: updated_at
+    direction: desc
+
+# Used once in query history.
+- kind: UserLocation
+  properties:
+  - name: location
+  - name: created_at
+    direction: desc
+
+# Used 4 times in query history.
+- kind: UserLocation
+  properties:
+  - name: location
+  - name: updated_at
+    direction: desc
+
+# Used 19 times in query history.
+- kind: UserLocation
+  properties:
+  - name: location
+  - name: watching
+  - name: updated_at
     direction: desc

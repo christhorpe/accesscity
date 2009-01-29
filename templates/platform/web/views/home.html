@@ -1,9 +1,6 @@
 {% extends "../ui/base.html" %}
 {% block mainpanel %}
 		
-	{% if useraccount %}
-		{{useraccount.name}} / {{useraccount.user}} / {{useraccount.fbid}}
-	{% endif %}
 <div class="welcome">
 	<div class="firstcol">
 	<div class="description border-top">
@@ -18,6 +15,7 @@
 	
 	<div class="latest border-top">
 		<h1>latest</h1>
+		{% include "../elements/itemlist.html" %}
 	</div>
 	</div>
 	

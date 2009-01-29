@@ -8,34 +8,73 @@
 	
 	{% if location %}
 	<!-- Place header -->
-	<div class="location">
-	    <h1>{{location.name	}}</h1>
-			<h2>do you use this station? Tell it like it is...</h2>
-
-
 	<table class="location">
 
 		<tr>
 			<td class="first">
+			<style>
+				div.location_background {
+					background-image: url("http://farm1.static.flickr.com/26/61609783_6cf2a53560_o.jpg");
+					width:640px;
+					height:400px;
+					background-color: #999;
+					margin-bottom: 10px;
+				}
+				
+				div.latest_item_panel {
+					background-image: url("/images/latestitem.png");
+					margin-top: 5px;
+					width:600px;
+					height:200px;
+					color: #fff;
+				}
+				
+				div.latest_item {
+					padding: 10px;
+					font-size: 23px;
+				}
+				
+				div.latest_item_trail {
+					font-size: 12px;
+					color: #9ef;
+				}
+			</style>
+			
+			<div class="location_background">
+				<div class="location">
+	    			<h1>{{location.name	}}</h1>
+					<h2>Do you use this station? Tell it like it is...</h2>
 
-				<div class="border-top">
-					<h4 class="soft-grey">people who've helped describe this station</h4>
+					<div class="border-top">
+						<h4>people who've helped describe this station</h4>
+					</div>
+					<table><tr>
+						{% for userlocation in userlocations %}
+							{% ifequal userlocation.useraccount.network "facebook" %}
+								
+							{% else %}
+								<td><a href="/profile/{{userlocation.useraccount.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
+							{% endifequal %}
+						{% endfor%}
+					</tr></table>
+					<div class="latest_item_panel">
+						{% for item in items %}
+							{% if forloop.first %}
+								<div class="latest_item" id="id_latest_item"><div class="latest_item_trail">latest text item</div><h1 id="id_latest_item_title">{{item.title}}</h1><div id="id_latest_item_text">{{item.text}}</div><div id="id_latest_item_date">posted {{item.created_at|timesince}} ago</div></div>
+							{% endif %}
+						{% endfor %}
+					</div>
 				</div>
-
+			</div>		
 				<!-- Tips -->
-				<div class="border-top">
+				<div>
 
-		    	<h3>posts from people</h3>
-					{% for item in items %}
-					<div class="tip">
-			        <h4><Span style="font-size:0.8em">{{item.tag}}</Span>: <a href="/items/{{item.key}}">{{item.title}}</a> from <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a>
-						<Span style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago</Span></h4>
-			        <p>
-			        	{{item.text}}
-					</p>
-			    </div>
-						<span></span>
-					{% endfor %}
+		    	<h1>Recent posts</h1>
+					
+					<div id="id_recent_posts">
+						{% include "../elements/itemlist.html" %}
+					</div>
+
 				</div>
 			</td>
 			<td class="second">
@@ -85,7 +124,6 @@
 			</td>
 		</tr>
 	</table>
-	    	</div>
 	{% else %}
 		<P>Location not found</P>
 		{{locationurl}}
