@@ -8,9 +8,9 @@
 			<table>
 				<tr valign="bottom"><td>
 	{% ifequal profile.network "facebook" %}
-		<fb:profile-pic uid="loggedinuser" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{useraccount.profileid}}">{{useraccount.name}}</a>
+		<fb:profile-pic uid="{{profile.fbid}}" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{useraccount.profileid}}">{{profile.name}}</a>
 	{% else %}
-		<a href="/profile/{{useraccount.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{useraccount.profileid}}">{{useraccount.name}}</a>
+		<a href="/profile/{{profile.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{profile.profileid}}">{{useraccount.name}}</a>
 	{% endifequal %}
 		</td>
 		<td align="left">

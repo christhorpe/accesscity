@@ -13,7 +13,7 @@ import facebook
 class MainHandler(webapp.RequestHandler):
 	def get(self, current_url):
 		useraccount = models.get_current_auth_user(self)
-		items = models.get_latest_text_items(10)
+		items = models.get_latest_text_items(5)
 		usercount = models.get_counter("total_users")
 		itemcount = models.get_counter("total_items")
 		ratingcount = models.get_counter("total_ratings")

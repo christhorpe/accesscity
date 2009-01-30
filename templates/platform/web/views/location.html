@@ -33,7 +33,7 @@
 					<table><tr>
 						{% for userlocation in userlocations %}
 							{% ifequal userlocation.useraccount.network "facebook" %}
-								<td><fb:profile-pic uid="loggedinuser" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
+								<td><fb:profile-pic uid="{{userlocation.useraccount.fbid}}" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
 							{% else %}
 								<td><a href="/profile/{{userlocation.useraccount.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
 							{% endifequal %}
