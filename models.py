@@ -28,6 +28,7 @@ class UserAccount(db.Model):
 	updated_at = db.DateTimeProperty()
 	itemcount = db.IntegerProperty(default=0)
 	ratingcount = db.IntegerProperty(default=0)
+	actioncount = db.IntegerProperty(default=0)
 
 
 class DataSource(db.Model):
@@ -105,10 +106,15 @@ def get_userlocations_for_location(location, limit, page):
 	return userlocations
 
 
+def get_userlocations_for_user(useraccount):
+	userlocations = UserLocation.all().filter("useraccount = ", useraccount).order("-updated_at")
+	return userlocations
+
 def get_userlocation_activity(location, useraccount, follow):
 	userlocation = False
 	userlocation = db.Query(UserLocation).filter("location =", location).filter("useraccount =", useraccount).filter("follow =", follow).get()
 	return userlocation
+
 	
 def log_userlocation_activity(location, useraccount, follow):
 	userlocation = get_userlocation_activity(location, useraccount, follow)
@@ -119,6 +125,8 @@ def log_userlocation_activity(location, useraccount, follow):
 		userlocation.follow = False
 		userlocation.interaction = "item"
 		userlocation.put()
+	key = str(location.indexname) + "_ul"
+	memcache.delete(key)
 	return userlocation
 	
 	
@@ -176,7 +184,7 @@ class Rating(db.Model):
 	location = db.ReferenceProperty(Location)
 	useraccount = db.ReferenceProperty(UserAccount)
 	when = db.StringProperty(default="Peak",required=True,choices=['peak', 'offpeak', 'weekend'])
-	howeasy = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
+	how_easy = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	steps = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	busyness = db.IntegerProperty(default=3, required=True,choices=[1,2,3,4,5])
 	created_at = db.DateTimeProperty(auto_now_add=True)
@@ -269,6 +277,8 @@ def create_user_account_from_gmail(user):
 		temp = useraccount.name.split("@")
 		useraccount.name = temp[0]
 	useraccount.put()
+	increment_counter("total_users")
+	increment_counter("gmail_users")
 	return useraccount
 
 
@@ -280,6 +290,8 @@ def create_user_account_from_facebook(user):
 	useraccount.fbid = user['uid']
 	useraccount.name = user['name']
 	useraccount.put()
+	increment_counter("total_users")
+	increment_counter("facebook_users")
 	return useraccount
 
 

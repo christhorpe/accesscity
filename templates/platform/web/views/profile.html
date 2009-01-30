@@ -2,14 +2,45 @@
 
 {% block mainpanel %}
 
+<table>
+	<tr valign="top">
+		<td width="640px">
+			<table>
+				<tr valign="bottom"><td>
 	{% ifequal profile.network "facebook" %}
-		facebook
+		<fb:profile-pic uid="loggedinuser" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{useraccount.profileid}}">{{useraccount.name}}</a>
 	{% else %}
-		gmail
+		<a href="/profile/{{useraccount.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{useraccount.profileid}}">{{useraccount.name}}</a>
 	{% endifequal %}
+		</td>
+		<td align="left">
+			{{useraccount.itemcount}} items posted / {{useraccount.ratingcount}} ratings
+			</td>
+		</tr>
+		</table>
 	
-	{% for item in items %}
-		<div>{{item.title}}</div>
-	{% endfor %}
-
+	<div class="latest_item_panel">
+						{% for item in items %}
+							{% if forloop.first %}
+								<div class="latest_item_profile" id="id_latest_item">
+									<div class="latest_item_trail">Latest {{item.tag}}</div>
+									<h1 id="id_latest_item_title">{{item.title}}</h1>
+									<div id="id_latest_item_text">{{item.text}}</div>
+									<div id="id_latest_item_date">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a></div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+	<br />
+	<br />
+	{% include "../elements/itemlist.html"%}
+	</td>
+	<td>
+		<h3>Locations</h3>
+		{% for userlocation in userlocations %}
+			<div><a href="/location/{{userlocation.location.indexname}}">{{userlocation.location.name}}</a></div>
+		{% endfor %}
+	</td>
+	</tr>
+	</table>
 {% endblock %}

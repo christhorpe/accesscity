@@ -6,16 +6,31 @@
 	{% if not ajax_item %}
 		Go to <a href="/location/{{location.indexname}}">{{location.name}}</a> page.
 	{% else %}
-		<p id="id_post_another">Post another</p>
 		{% ifequal item.media_type "Text"%}
 		<script type="text/javascript">
-			$(document).ready(function() { 
 				$("#id_latest_item_title").html("{{item.title}}");
 				$("#id_latest_item_text").html("{{item.text}}");
-				$("#id_latest_item_date").html("posted about a second ago");
+				$("#id_latest_item_date").html('posted about a second ago by <a href="/profile/{{useraccount.name}}">{{useraccount.name}}</a>');
 				$("#id_recent_posts").load("/items/location/{{location.indexname}}");
-			});
 		</script>
 		{% endifequal %}
 	{% endif %}
+	{% ifequal useraccount.network "facebook" %}
+	<script type="text/javascript">
+	var facebook_item_activity_feed = function() {
+  		var comment_data = {"location-url":'http://beta.accesscity.co.uk/location/{{location.indexname}}',
+							"location": '{{location.name}}',
+                      		"item-text":'{{item.title}}<br/>{{item.text}}',
+                      		"item-source":'Website',
+                      		"item-sourceurl":'http://beta.accesscity.co.uk/'
+                      		};
+  		FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm");
+		FB.Connect.showFeedDialog(44623658895, comment_data);
+	};
+	facebook_item_activity_feed();
+	</script>
+	
+	{% endifequal %}
+	
+
 {% endif %}

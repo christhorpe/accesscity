@@ -7,9 +7,9 @@
 			        		<div>
 			        			{{item.text}}
 							</div>
-						<div style="font-size:0.6em;color:#888">posted by from <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> {{item.created_at|timesince}} ago
+						<div style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> 
 						{% if not location %}	
-							about {{item.location.title}}
+							about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a>
 						{% endif %}
 						</div>
 			    </div>

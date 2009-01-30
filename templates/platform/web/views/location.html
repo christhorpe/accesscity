@@ -20,24 +20,6 @@
 					background-color: #999;
 					margin-bottom: 10px;
 				}
-				
-				div.latest_item_panel {
-					background-image: url("/images/latestitem.png");
-					margin-top: 5px;
-					width:600px;
-					height:200px;
-					color: #fff;
-				}
-				
-				div.latest_item {
-					padding: 10px;
-					font-size: 23px;
-				}
-				
-				div.latest_item_trail {
-					font-size: 12px;
-					color: #9ef;
-				}
 			</style>
 			
 			<div class="location_background">
@@ -51,7 +33,7 @@
 					<table><tr>
 						{% for userlocation in userlocations %}
 							{% ifequal userlocation.useraccount.network "facebook" %}
-								
+								<td><fb:profile-pic uid="loggedinuser" size="square" facebook-logo="true" height="24" width="24"></fb:profile-pic><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
 							{% else %}
 								<td><a href="/profile/{{userlocation.useraccount.profileid}}"><img src="/images/user.png"></a><br /><a href="/profile/{{userlocation.useraccount.profileid}}">{{userlocation.useraccount.name}}</a></td>
 							{% endifequal %}
@@ -60,7 +42,12 @@
 					<div class="latest_item_panel">
 						{% for item in items %}
 							{% if forloop.first %}
-								<div class="latest_item" id="id_latest_item"><div class="latest_item_trail">latest text item</div><h1 id="id_latest_item_title">{{item.title}}</h1><div id="id_latest_item_text">{{item.text}}</div><div id="id_latest_item_date">posted {{item.created_at|timesince}} ago</div></div>
+								<div class="latest_item" id="id_latest_item">
+									<div class="latest_item_trail">Latest {{item.tag}}</div>
+									<h1 id="id_latest_item_title">{{item.title}}</h1>
+									<div id="id_latest_item_text">{{item.text}}</div>
+									<div id="id_latest_item_date">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a></div>
+								</div>
 							{% endif %}
 						{% endfor %}
 					</div>
@@ -108,9 +95,9 @@
 
 				<h3>post via mobile/email</h3>
 				<font style="font-size:0.8em">
-				For SMS, send a message to 07797885024 starting with @hisk
+				For SMS, send a message to 07797885024 starting with @aldg
 				<br/><br/>
-				For email, send a message to fault@accesscity.co.uk starting with @hisk
+				For email, send a message to fault@accesscity.co.uk with the subject starting with @aldg
 				</font>
 			</div>
 			

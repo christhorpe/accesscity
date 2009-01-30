@@ -14,6 +14,10 @@ class MainHandler(webapp.RequestHandler):
 	def get(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		items = models.get_latest_text_items(10)
+		usercount = models.get_counter("total_users")
+		itemcount = models.get_counter("total_items")
+		ratingcount = models.get_counter("total_ratings")
+		locationcount = models.get_counter("total_locations")
 		template_values = {
 			'ratingform': models.RatingForm(),
 			'itemform': models.ItemForm(),
@@ -23,6 +27,10 @@ class MainHandler(webapp.RequestHandler):
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'items': items,
+			'usercount': usercount,
+			'itemcount': itemcount,
+			'ratingcount': ratingcount,
+			'locationcount': locationcount,
 		}
 		viewhelpers.render_template(self, "views/home", template_values)
 
@@ -44,6 +52,7 @@ class LocationHandler(webapp.RequestHandler):
 			'media_types': helpers.get_media_types(),
 			'form_tags': helpers.get_form_tags(),
 			'locations': models.Location.all().order('name'),
+			'location': location,
 			'locationrating': locationrating,
 			'userlocations': userlocations,
 		}
@@ -58,19 +67,20 @@ class ProfileHandler(webapp.RequestHandler):
 		profile = False
 		items = False
 		ratings = False
-		locations = False
+		userlocations = False
 		useraccount = models.get_current_auth_user(self)
 		profile = models.UserAccount.get_by_key_name(profileurl)
 		if profile:
 			items = models.get_user_items(profile)
 			ratings = models.get_user_ratings(profile)
+			userlocations = models.get_userlocations_for_user(profile)
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'profile': profile,
 			'items': items,
 			'ratings': ratings,
-			'locations': locations,
+			'userlocations': userlocations,
 		}
 		viewhelpers.render_template(self, "views/profile", template_values)
 
@@ -99,9 +109,15 @@ class ItemHandler(webapp.RequestHandler):
 			item.tag = tag
 			item.media_type = media_type
 			item.put()
+			location.itemcount += 1
+			location.put()
+			useraccount.itemcount +=1
+			useraccount.actioncount +=1
+			useraccount.put()
 			created = True
 			models.kill_location_items_cache(location)
 			userlocation = models.log_userlocation_activity(location, useraccount, False)
+			models.increment_counter("total_items")
 		template_values = {
 			'created':created,
 			'itemform':form,
@@ -175,17 +191,17 @@ class RatingHandler(webapp.RequestHandler):
             if rating.when == "peak":
                 locationrating.peak_count += 1
                 locationrating.peak_busy_sum += rating.busyness
-                locationrating.peak_easy_sum += rating.howeasy
+                locationrating.peak_easy_sum += rating.how_easy
                 locationrating.peak_step_sum += rating.steps
             if rating.when == "offpeak":
                 locationrating.offpeak_count += 1
                 locationrating.offpeak_busy_sum += rating.busyness
-                locationrating.offpeak_easy_sum += rating.howeasy
+                locationrating.offpeak_easy_sum += rating.how_easy
                 locationrating.offpeak_step_sum += rating.steps
             if rating.when == "weekend":
                 locationrating.weekend_count += 1
                 locationrating.weekend_busy_sum += rating.busyness
-                locationrating.weekend_easy_sum += rating.howeasy
+                locationrating.weekend_easy_sum += rating.how_easy
                 locationrating.weekend_step_sum += rating.steps
             
             locationrating.put()

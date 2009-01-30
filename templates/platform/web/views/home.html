@@ -7,6 +7,9 @@
 		<h1>hello</h1>
 		<P>Getting round London can be difficult for anyone, whatever your obstacle - mobility, buggies or heavy bags.</P>
 		<P>Search AccessCity for the easiest routes and help build the real view by adding your own experiences.</P>
+		<h1>current statistics</h1>
+		<p>{{usercount}} users, submitting {{itemcount}} items and {{ratingcount}} ratings about {{locationcount}} locations.</p>
+		
 	</div>
 	
 	<div class="post border-top">
@@ -15,6 +18,25 @@
 	
 	<div class="latest border-top">
 		<h1>latest</h1>
+		{% for item in items %}
+			{% if forloop.first %}
+
+		<div class="tip">
+			        	<div style="font-size:0.8em">{{item.tag}}</div>
+						<h4>
+							<a href="/items/{{item.key}}">{{item.title}}</a></h4>
+			        		<div>
+			        			{{item.text}}
+							</div>
+						<div style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> 
+						{% if not location %}	
+							about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a>
+						{% endif %}
+						</div>
+			    </div>
+				<hr />
+				{% endif %}
+		{% endfor %}
 		{% include "../elements/itemlist.html" %}
 	</div>
 	</div>
