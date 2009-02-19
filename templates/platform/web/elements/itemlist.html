@@ -5,8 +5,17 @@
 						<h4>
 							<a href="/item/{{item.key}}">{{item.title}}</a></h4>
 			        		<div>
-			        			{{item.text}}
-							</div>
+			        			{% if item.url %}
+											{% ifequal item.media_type "Video" %}
+												{{ item.url }}
+											{% else %}
+												<img src="{{ item.url }}">
+											{% endifequal %}
+										{% else %}
+											{{ item.text }}
+										{% endif %}
+										<br/>
+									</div>
 						<div style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> 
 						{% if not location %}	
 							about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a>

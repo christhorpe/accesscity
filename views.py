@@ -14,6 +14,9 @@ class MainHandler(webapp.RequestHandler):
 	def get(self, current_url):
 		useraccount = models.get_current_auth_user(self)
 		items = models.get_latest_text_items(5)
+		video_featured_items = models.get_featured_items("Video",1)
+		image_featured_items = models.get_featured_items("Image", 3)
+		
 		usercount = models.get_counter("total_users")
 		itemcount = models.get_counter("total_items")
 		ratingcount = models.get_counter("total_ratings")
@@ -31,6 +34,8 @@ class MainHandler(webapp.RequestHandler):
 			'itemcount': itemcount,
 			'ratingcount': ratingcount,
 			'locationcount': locationcount,
+			'video_featured_item': video_featured_items[0],
+			'image_featured_items': image_featured_items
 		}
 		viewhelpers.render_template(self, "views/home", template_values)
 
@@ -91,7 +96,12 @@ class ItemHandler(webapp.RequestHandler):
 		template_values = {
 			'useraccount': useraccount,
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
-			'itemurl': itemurl
+			'itemurl': itemurl,
+			'locations': models.Location.all().order('name'),
+			'itemform': models.ItemForm(),
+			'ratingform': models.RatingForm(),
+			'media_types': helpers.get_media_types(),
+			'form_tags': helpers.get_form_tags()
 		}
 		item = models.Item.get(itemurl)
 		if item:
@@ -114,6 +124,10 @@ class ItemHandler(webapp.RequestHandler):
 			item.location = location
 			item.tag = tag
 			item.media_type = media_type
+			# Handle oembed
+			if (item.media_type == "Video") or (item.media_type == "Image"):
+			    item.url = helpers.get_oembed_links(item.text)
+			    models.kill_featured_caches()
 			item.put()
 			location.itemcount += 1
 			location.put()
