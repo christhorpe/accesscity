@@ -93,7 +93,13 @@ class ItemHandler(webapp.RequestHandler):
 			'user_action_url': helpers.get_user_action_url(useraccount, current_url),
 			'itemurl': itemurl
 		}
+		item = models.Item.get(itemurl)
+		if item:
+		    template_values['location'] = item.location
+		    template_values['locationrating'] = models.LocationRatings.gql("WHERE location = :1", item.location).get()
+		    template_values['item'] = item
 		viewhelpers.render_template(self, "views/location", template_values)
+		
 	def post(self, current_url, itemurl):
 		useraccount = models.get_current_auth_user(self)
 		tag = self.request.get("tag")

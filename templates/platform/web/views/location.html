@@ -55,13 +55,33 @@
 			</div>		
 				<!-- Tips -->
 				<div>
-
+					<!-- Just on item -->
+					{% if item %}
+						
+						<h1> Post from {{item.useraccount.name}}</h1>
+						<div class="tip">
+				        	<div style="font-size:0.8em">{{item.tag}}</div>
+							<h4>
+								<a href="/item/{{item.key}}">{{item.title}}</a></h4>
+				        		<div>
+				        			{{item.text}}
+								</div>
+							<div style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> 
+							{% if not location %}	
+								about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a>
+							{% endif %}
+							</div>
+							<br/>
+							<P><a href="/location/{{item.location.indexname}}">View all posts for {{item.location.name}}</a></P>
+							<br/>
+					{% else %}
+					<!-- All items -->
 		    	<h1>Recent posts</h1>
 					
 					<div id="id_recent_posts">
 						{% include "../elements/itemlist.html" %}
 					</div>
-
+					{% endif %}
 				</div>
 			</td>
 			<td class="second">
@@ -91,6 +111,7 @@
 			</td>
 		</tr>
 	</table>
+	
 	{% else %}
 		<P>Location not found</P>
 		{{locationurl}}
