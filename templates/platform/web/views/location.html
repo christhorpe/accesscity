@@ -66,28 +66,8 @@
 			</td>
 			<td class="second">
 
-			<div class="border-full column_padded">
-				{% if locationrating %}
-				<h4 class="soft-grey">overall rating: <span>0%</span></h4>
-				<P>Peak: {{ locationrating.peak_count }} | offpeak: {{ locationrating.offpeak_count }} | weekend: {{ locationrating.weekend_count }}</P>
-				{% else %}
-				 <h4>No ratings yet</h4>
-				{% endif %}
-				<P><a href="#" id="add_rating">Add Rating</a></P>
-				
-				<script type="text/javascript">
-					$(document).ready(function() {
-						$("#add_rating").click(function(){
-							$("#rating_form").toggle();
-						});
-					});
-				</script>
-				
-				<div id="rating_form" class="rating_form" style="display:none">
-					<h4 class="soft-grey">Rate Station</h4>
-        
-					{% include "../elements/ratingform.html" %}
-				</div>
+			<div class="border-full column_padded" id="id_rating_form_content">
+				{% include "../elements/ratingform.html" %}
 			</div>
 			
 

@@ -131,6 +131,7 @@ class ItemHandler(webapp.RequestHandler):
 		}
 		if item:
 			template_values['item'] = item
+			
 		if self.request.get("item_ajax_submit"):
 			viewhelpers.render_template(self, "views/ajaxitem", template_values)
 		else:
@@ -166,10 +167,10 @@ class RatingHandler(webapp.RequestHandler):
         
         location_key = self.request.get('id_location_key')
         location = models.Location.get(location_key)
-        
         template_values = {
 			'useraccount': useraccount,
-			'location' : location
+			'location' : location,
+			'ajax_rating': self.request.get("rating_ajax_submit")
 		}
         ratingform = models.RatingForm(self.request.POST)
         
@@ -183,7 +184,7 @@ class RatingHandler(webapp.RequestHandler):
             # create LocationRatings
             locationrating = None
             locationrating = models.LocationRatings.gql("WHERE location = :1", location).get()
-                        
+            
             if not locationrating:
                 locationrating = models.LocationRatings()
                 locationrating.location = location
@@ -205,11 +206,22 @@ class RatingHandler(webapp.RequestHandler):
                 locationrating.weekend_step_sum += rating.steps
             
             locationrating.put()
-            #locationrating.{rating.when}_count = 
+            models.increment_counter("total_ratings")
+            models.kill_location_items_cache(location)
+            template_values['ratingform'] = models.RatingForm()
             template_values['message'] = "Rating Created"
+            template_values['locationrating'] = locationrating
+            template_values['created'] = True
         else:
             template_values["error_message"] = "Error occurrred creating rating"
             template_values["ratingform"] = ratingform
+            template_values["created"] = False
         
-        viewhelpers.render_template(self, "views/created", template_values)
+        if locationrating:
+        	template_values['locationrating'] = locationrating
+        
+        if self.request.get("rating_ajax_submit"):
+        	viewhelpers.render_template(self, "elements/ratingform", template_values)
+        else:
+            viewhelpers.render_template(self, "views/created", template_values)
     
