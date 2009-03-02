@@ -17,7 +17,7 @@ indexes:
   - name: created_at
     direction: desc
 
-# Used 55 times in query history.
+# Used 59 times in query history.
 - kind: Item
   properties:
   - name: media_type

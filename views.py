@@ -37,7 +37,7 @@ class MainHandler(webapp.RequestHandler):
 			'image_featured_items': image_featured_items
 		}
 		if video_featured_items:
-		    template_values['video_featured_items'] = video_featured_items[0]
+		    template_values['video_featured_item'] = video_featured_items[0]
 		
 		viewhelpers.render_template(self, "views/home", template_values)
 
