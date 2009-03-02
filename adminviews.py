@@ -342,7 +342,7 @@ class DataLoadHandler(webapp.RequestHandler):
 			location.indexname = indexname.lower()
 			location.locationid = models.get_new_locationid()
 			location.put()
-			models.increment_count("total_locations")
+			#models.increment_count("total_locations")
 		template_values = {
 						'nodecount': nodecount,
 						}
