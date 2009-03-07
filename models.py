@@ -5,9 +5,6 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import users
 from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-from google.appengine.api import memcache
-from google.appengine.ext.db import djangoforms
 
 import helpers
 import facebook
