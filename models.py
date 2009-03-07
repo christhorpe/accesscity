@@ -164,11 +164,24 @@ def get_items_for_location(location, limit, page):
 		memcache.add(key, items, 300)
 	return items
 
+def get_featured_items(type, limit):
+    key = "video_featured_item_"+type
+    items = memcache.get(key)
+    if not items:
+        query = db.Query(Item)
+        query.filter("media_type = ",type)
+        query.order("-created_at")
+        items = query.fetch(limit, 0)
+        memcache.add(key, items, 300)
+    return items
 
 def kill_location_items_cache(location):
 	key = str(location.indexname) + "_it"
 	memcache.delete(key)
 
+def kill_featured_caches():
+    memcache.delete("video_featured_item_Video")
+    memcache.delete("video_featured_item_Image")
 
 class ItemForm(djangoforms.ModelForm):
   class Meta:

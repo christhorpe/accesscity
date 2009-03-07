@@ -1,3 +1,4 @@
+<div id="id_item_form_content">
 {% if useraccount %}
 <h1>post now</h1>
 
@@ -32,6 +33,7 @@
 {% endfor %}
 <input type="submit" name="submit" value="add information" id="id_itemform_submit"/>
 <div class="form_submit_row"><span id="id_itemform_submit_link" class="form_submit_link">add information</span></div>
+
 </form>
 
 	<script type="text/javascript">
@@ -45,3 +47,4 @@
 {% else %}
 	{% include "../elements/logincontrol.html" %}
 {% endif %}
+</div>

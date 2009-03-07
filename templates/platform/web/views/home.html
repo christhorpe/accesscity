@@ -24,7 +24,7 @@
 		<div class="tip">
 			        	<div style="font-size:0.8em">{{item.tag}}</div>
 						<h4>
-							<a href="/items/{{item.key}}">{{item.title}}</a></h4>
+							<a href="/item/{{item.key}}">{{item.title}}</a></h4>
 			        		<div>
 			        			{{item.text}}
 							</div>
@@ -44,9 +44,35 @@
 	<div class="secondcol">
 		<div class="featured border-top">
 			<h1>featured</h1>
+			
+			{% if video_featured_item %}
+				<div class="video">
+		        	<div style="font-size:0.8em">{{video_featured_item.tag}}</div>
+							<h4><a href="/item/{{item.key}}">{{video_featured_item.title}}</a></h4>
+		        		<div>
+										{{ video_featured_item.url }}
+								</div>
+							</div>
+					<div style="font-size:0.6em;color:#888">posted {{video_featured_item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{video_featured_item.useraccount.name}}</a> 
+						{% if not location %}	
+							about <a href="/location/{{item.location.indexname}}">{{video_featured_item.location.name}}</a>
+							{% endif %}
+					</div>
+			{% endif %}
+
 		</div>
 		<div class="selection border-top">
 			<h2>Selection</h2>
+			{% for image_item in image_featured_items %}
+				<div class="photo">
+					<a href="/item/{{ image_item.key }}"><img src="{{image_item.url}}"></a>
+					<div style="font-size:0.6em;color:#888">posted {{image_item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{image_item.useraccount.name}}</a> 
+						{% if not location %}	
+							about <a href="/location/{{item.location.indexname}}">{{image_item.location.name}}</a>
+							{% endif %}
+					</div>
+				</div>
+			{% endfor %}
 		</div>
 </div>
 {% endblock %}

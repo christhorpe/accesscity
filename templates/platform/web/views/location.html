@@ -45,7 +45,17 @@
 								<div class="latest_item" id="id_latest_item">
 									<div class="latest_item_trail">Latest {{item.tag}}</div>
 									<h1 id="id_latest_item_title">{{item.title}}</h1>
-									<div id="id_latest_item_text">{{item.text}}</div>
+									<div id="id_latest_item_text">
+										{% if not item.url %}
+											{{item.text}}
+										{% else %}
+											{% ifequal item.media_type "Video" %}
+												<a href="/item/{{item.key}}">View Video</a>
+											{% else %}
+												<a href="/item/{{item.key}}">View Image</a>
+											{% endifequal %}
+										{% endif %}
+										</div>
 									<div id="id_latest_item_date">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a></div>
 								</div>
 							{% endif %}
@@ -55,39 +65,48 @@
 			</div>		
 				<!-- Tips -->
 				<div>
-
+					<!-- Just one item -->
+					{% if item %}
+						
+						<h1> Post from {{item.useraccount.name}}</h1>
+						<div class="tip">
+				        	<div style="font-size:0.8em">{{item.tag}}</div>
+							<h4>
+								<a href="/item/{{item.key}}">{{item.title}}</a></h4>
+				        		<div>
+											{% if item.url %}
+												{% ifequal item.media_type "Video" %}
+													{{ item.url }}
+												{% else %}
+													<img src="{{ item.url }}">
+												{% endifequal %}
+											{% else %}
+												{{ item.text }}
+											{% endif %}
+										</div>
+								</div>
+							<div style="font-size:0.6em;color:#888">posted {{item.created_at|timesince}} ago by <a href="/profile/{{item.useraccount.profileid}}">{{item.useraccount.name}}</a> 
+							{% if not location %}	
+								about <a href="/location/{{item.location.indexname}}">{{item.location.name}}</a>
+							{% endif %}
+							</div>
+							<br/>
+							<P><a href="/location/{{item.location.indexname}}">View all posts for {{item.location.name}}</a></P>
+							<br/>
+					{% else %}
+					<!-- All items -->
 		    	<h1>Recent posts</h1>
 					
 					<div id="id_recent_posts">
 						{% include "../elements/itemlist.html" %}
 					</div>
-
+					{% endif %}
 				</div>
 			</td>
 			<td class="second">
 
-			<div class="border-full column_padded">
-				{% if locationrating %}
-				<h4 class="soft-grey">overall rating: <span>0%</span></h4>
-				<P>Peak: {{ locationrating.peak_count }} | offpeak: {{ locationrating.offpeak_count }} | weekend: {{ locationrating.weekend_count }}</P>
-				{% else %}
-				 <h4>No ratings yet</h4>
-				{% endif %}
-				<P><a href="#" id="add_rating">Add Rating</a></P>
-				
-				<script type="text/javascript">
-					$(document).ready(function() {
-						$("#add_rating").click(function(){
-							$("#rating_form").toggle();
-						});
-					});
-				</script>
-				
-				<div id="rating_form" class="rating_form" style="display:none">
-					<h4 class="soft-grey">Rate Station</h4>
-        
-					{% include "../elements/ratingform.html" %}
-				</div>
+			<div class="border-full column_padded" id="id_rating_form_content">
+				{% include "../elements/ratingform.html" %}
 			</div>
 			
 
@@ -103,14 +122,12 @@
 			
 		<!-- Post -->
 		<div class="border-full column_padded">
-			<div id="id_item_form_content">
-
-		    {% include "../elements/itemform.html" %}
-			</div>
+			{% include "../elements/itemform.html" %}
 			</div>
 			</td>
 		</tr>
 	</table>
+	
 	{% else %}
 		<P>Location not found</P>
 		{{locationurl}}

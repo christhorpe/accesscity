@@ -135,7 +135,7 @@ div.latest {
 }
 
 div.secondcol {
-  min-height:400px;
+  min-height:700px;
 }
 div.secondcol div {
   margin-top:10px;
@@ -149,6 +149,12 @@ div.featured {
 div.selection {
   width:150px;
   float:left;
+}
+
+div.selection img {
+  width:140px;
+	height:100px;
+	margin-left:10px;
 }
 
 div.old_latest div.item {

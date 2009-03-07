@@ -1,5 +1,51 @@
+{% if locationrating %}
+	<h4 class="soft-grey">overall rating: <span>0%</span></h4>
+	<P>Peak: {{ locationrating.peak_count }} | offpeak: {{ locationrating.offpeak_count }} | weekend: {{ locationrating.weekend_count }}</P>
+{% else %}
+ <h4>No ratings yet</h4>
+{% endif %}
+
+{% if created %}
+	<h1>thank you</h1>
+		<p>Thank you, your Rating has been submitted.</p>
+		
+		{% ifequal useraccount.network "facebook" %}
+		<script type="text/javascript">
+		var facebook_item_activity_feed = function() {
+	  		var comment_data = {"location-url":'http://beta.accesscity.co.uk/location/{{location.indexname}}',
+								"location": '{{location.name}}',
+	                      		"item-text":'Rating Submitted for {{location.name}}',
+	                      		"item-source":'Website',
+	                      		"item-sourceurl":'http://beta.accesscity.co.uk/'
+	                      		};
+	  		FB.init("2be4a21659bf9ca4aac0c03423711af3", "/xd_receiver.htm");
+			FB.Connect.showFeedDialog(44623658895, comment_data);
+		};
+		facebook_item_activity_feed();
+		</script>
+
+		{% endifequal %}
+		
+{% endif %}
+
+<P><a href="#" id="add_rating">Add Rating</a></P>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#add_rating").click(function(){
+			$("#rating_form").toggle();
+		});
+	});
+</script>
+
+<div id="rating_form" class="rating_form" style="display:none">
+
 {% if useraccount %}
-<form action="/rating/create" method="post">
+
+<h4 class="soft-grey">Rate Station</h4>
+
+<form id="id_rating_form" action="/rating/create" method="post">
+	<input type="hidden" name="rating_ajax_submit" id="id_rating_ajax_submit" value="" />
 	<input name="id_location_key" type="hidden" value="{{ location.key }}">
 	{% for field in ratingform %}
 		{{ field.label_tag }} {{ field }}
@@ -9,6 +55,16 @@
 	<input type="submit" value="Add"/>
 	
 </form>
+
+<script type="text/javascript">
+	$(document).ready(function() { 
+		$("#id_rating_ajax_submit").val("True");
+		$("#id_rating_form").ajaxForm({target:"#id_rating_form_content"});
+	});
+</script>
+
 {% else %}
 	{% include "../elements/logincontrol.html" %}
 {% endif %}
+
+</div>
