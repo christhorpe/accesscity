@@ -1,0 +1,17 @@
+{% extends "../ui/base.html" %}
+
+{% block title %}
+	:: Search results
+{% endblock %}
+
+{% block mainpanel %}
+
+<h2>Search Results</h2>
+
+<P>Found {{ results_found }} results for '{{ search_text }}'</P>
+
+{% for location in locations %}
+	<a href="/location/{{location.indexname}}">{{ location.name }}</a><br/>
+{% endfor %}
+
+{% endblock %}

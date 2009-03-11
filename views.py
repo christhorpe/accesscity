@@ -67,6 +67,19 @@ class LocationHandler(webapp.RequestHandler):
 			template_values['location'] = location
 		viewhelpers.render_template(self, "views/location", template_values)
 
+class SearchHandler(webapp.RequestHandler):
+    def get(self, current_url):
+        useraccount = models.get_current_auth_user(self)
+        search_text = self.request.get('search_text')
+        locations = models.Location.all().search(search_text)
+        template_values = {
+            'useraccount': useraccount,
+            'search_text': search_text,
+            'results_found': locations.count(),
+            'locations': locations
+        }
+        viewhelpers.render_template(self, "views/search", template_values)
+
 
 class ProfileHandler(webapp.RequestHandler):
 	def get(self, current_url, profileurl):

@@ -1,6 +1,7 @@
 import random
 
 from google.appengine.ext import db
+from google.appengine.ext import search
 from google.appengine.ext.webapp import template
 from google.appengine.ext.db import djangoforms
 from google.appengine.api import users
@@ -45,7 +46,7 @@ class APIKey(db.Model):
 	updated_at = db.DateTimeProperty(auto_now=True)	
 
 
-class Location(db.Model):
+class Location(search.SearchableModel):
 	name = db.StringProperty()
 	address = db.TextProperty()
 	location_type = db.StringProperty()
@@ -91,15 +92,11 @@ class UserLocation(db.Model):
 
 
 def get_userlocations_for_location(location, limit, page):
-	key = str(location.indexname) + "_ul"
-	userlocations = memcache.get(key)
-	if not userlocations:
-		query = db.Query(UserLocation)
-		query.filter("location = ", location)
-		query.filter("follow = ", False)
-		query.order("-updated_at")
-		userlocations = query.fetch(limit, 0)
-		memcache.add(key, userlocations, 300)
+	query = db.Query(UserLocation)
+	query.filter("location = ", location)
+	query.filter("follow = ", False)
+	query.order("-updated_at")
+	userlocations = query.fetch(limit, 0)
 	return userlocations
 
 
@@ -122,8 +119,6 @@ def log_userlocation_activity(location, useraccount, follow):
 		userlocation.follow = False
 		userlocation.interaction = "item"
 		userlocation.put()
-	key = str(location.indexname) + "_ul"
-	memcache.delete(key)
 	return userlocation
 	
 	
@@ -143,45 +138,29 @@ class Item(db.Model):
 
 
 def get_latest_text_items(limit):
-	key = "all_text_it"
-	items = memcache.get(key)
-	if not items:
-		query = db.Query(Item)
-		query.filter("media_type = ", "Text")
-		query.order("-created_at")
-		items = query.fetch(limit, 0)
-		memcache.add(key, items, 60)
+	items = None
+	query = db.Query(Item)
+	query.filter("media_type = ", "Text")
+	query.order("-created_at")
+	items = query.fetch(limit, 0)
 	return items
 
 def get_items_for_location(location, limit, page):
-	key = str(location.indexname) + "_it"
-	items = memcache.get(key)
-	if not items:
-		query = db.Query(Item)
-		query.filter("location = ", location)
-		query.order("-created_at")
-		items = query.fetch(limit, 0)
-		memcache.add(key, items, 300)
+	items = None
+	query = db.Query(Item)
+	query.filter("location = ", location)
+	query.order("-created_at")
+	items = query.fetch(limit, 0)
 	return items
 
 def get_featured_items(type, limit):
-    key = "video_featured_item_"+type
-    items = memcache.get(key)
-    if not items:
-        query = db.Query(Item)
-        query.filter("media_type = ",type)
-        query.order("-created_at")
-        items = query.fetch(limit, 0)
-        memcache.add(key, items, 300)
-    return items
+	items = None
+	query = db.Query(Item)
+	query.filter("media_type = ",type)
+	query.order("-created_at")
+	items = query.fetch(limit, 0)
+	return items
 
-def kill_location_items_cache(location):
-	key = str(location.indexname) + "_it"
-	memcache.delete(key)
-
-def kill_featured_caches():
-    memcache.delete("video_featured_item_Video")
-    memcache.delete("video_featured_item_Image")
 
 class ItemForm(djangoforms.ModelForm):
   class Meta:
